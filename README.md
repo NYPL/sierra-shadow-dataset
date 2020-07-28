@@ -13,7 +13,8 @@ There you'll find...
     containing both research and branch items.
 
   - `sierra-branch-healed-joined.datatable` a serialized R datatable object
-    containing both just branch items as determined by the ITYPE
+    containing both just branch items as determined by the ITYPE. This
+    is _substantially_ smaller than the full or research counterpart.
 
   - `sierra-research-healed-joined.datatable` a serialized R datatable object
     containing both just research items as determined by the ITYPE
@@ -45,6 +46,17 @@ Other formats may be included if other people find that it would be useful.
 
 ## Development stack 
 
+
+The following R packages are needed
+
+  - data.table
+  - magrittr
+  - pbapply
+  - stringr
+  - colorout (optional)
+
+The two python sripts are Python 3. They use the `sys`, `json`, `re`,
+and `fileinput` modules. These should be included with Python 3
 
 ## Organization of git repo
 

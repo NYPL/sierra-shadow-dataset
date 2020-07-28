@@ -4,6 +4,7 @@
 # options(warn=1)
 options(echo=TRUE)
 
+require(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)

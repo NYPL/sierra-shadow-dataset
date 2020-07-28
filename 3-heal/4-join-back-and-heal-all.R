@@ -1,6 +1,4 @@
-#!/usr/bin/Rscript --vanilla
-
-# #!/usr/local/bin//Rscript --vanilla
+#!/usr/local/bin//Rscript --vanilla
 
 
 # ------------------------------ #
@@ -10,7 +8,7 @@ options(echo=TRUE)
 
 args <- commandArgs(trailingOnly=TRUE)
 
-library(colorout)
+require(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)

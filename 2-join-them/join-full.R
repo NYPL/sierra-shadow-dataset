@@ -1,9 +1,8 @@
-#!/usr/bin/Rscript --vanilla
-
 #!/usr/local/bin//Rscript --vanilla
 
 options(echo=TRUE)
 
+require(colorout)
 library(data.table)
 library(stringr)
 library(magrittr)

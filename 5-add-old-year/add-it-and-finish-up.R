@@ -8,7 +8,7 @@ options(echo=TRUE)
 
 args <- commandArgs(trailingOnly=TRUE)
 
-library(colorout)
+require(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
