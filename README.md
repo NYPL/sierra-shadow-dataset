@@ -1,4 +1,26 @@
 
-# NYPL SHADOW EXPORT
+# NYPL Shadow Dataset Generation
 
-(stub)
+## Introduction
+
+## Why?
+
+Step 1
+-----
+stub
+
+
+Step 2
+-----
+stub
+
+
+Step 3 (and 4)
+-----
+stub
+
+
+Step 5
+-----
+stub
+
