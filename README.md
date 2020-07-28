@@ -7,7 +7,7 @@
 
 ## Why?
 
-## Where an I get the dataset(s)?
+## Where can I get the dataset(s)?
 It lives on a shared NYPL drive named `NYPL Shadow Dataset`.
 There you'll find...
 
@@ -117,61 +117,104 @@ stub
   - `oh08`
     The MARC 008 fixed field which [is extremely rich in information](https://www.loc.gov/marc/bibliographic/bd008.html)
   - `source`
+    Just `sierra-nypl` for now but may include parter records later.
   - `pub_year`
+    Beware that some of these are 9999 and lower than 199. This cannot be rectified without further information (TODO)
   - `catalogdate`
   - `bib_location`
+    You almost certainly want `item_location_code` or `item_location_str` instead. Future version may remove this field (TODO)
   - `biblevel`
+    MONOGRAPH, SERIAL, ARCHIVES & MSS, etc...
   - `mattype`
+    BOOK/TEXT, SCORE, MICROFORM, etc...
   - `standard_nums`
+    Non-specific "standard numbers". Don't trust these.
   - `isbn`
+    ISBNs. Converted to ISBN-13, deduplicated, cleaned, and check-digit confirmed.
   - `issn`
+    ISSNs. Deduplicated, cleaned, and check-digit confirmed. No hyphen
   - `lccn`
+    Normalized 12-digit LCCN. No revision numbers. 48% present (more info)[https://www.loc.gov/marc/lccn_structure.html]
   - `oclc`
+    OCLC number. 65% present
   - `other_standard`
+    Miscellaneous other control numbers. Don't trust these.
   - `callnum`
+    __NYPL__ call number. Included Billings, Fixed order, etc...
   - `lccall`
+    Library of Congress call number. (Can be used for subject analysis.)[https://www.loc.gov/catdir/cpso/lcco/] 56% present.
   - `callnum2`
+    Dewey/branch call numbers. 99.7% present for branch items. (Can be used for subject analysis)[https://www.oclc.org/content/dam/oclc/dewey/resources/summaries/deweysummaries.pdf]
   - `v852a`
   - `langcode`
+    (Language code)[https://www.loc.gov/marc/languages/language_code.html]
   - `lang`
+    (Language name)[https://www.loc.gov/marc/languages/language_code.html]
   - `countrycode`
+    (country code)[https://www.loc.gov/marc/countries/countries_code.html]
   - `country`
+    (country name)[https://www.loc.gov/marc/countries/countries_code.html]
   - `pubisher`
+    This is misspelled. This will be fixed in the next release (TODO)
   - `nypltype`
+    Always "bib". May be removed in future (TODO)
   - `description1`
+    MARC field 300\$a (physical description)[https://www.loc.gov/marc/bibliographic/bd300.html]
   - `otherdetails`
+    MARC field 300\$b (physical description)[https://www.loc.gov/marc/bibliographic/bd300.html]
   - `dimensions`
+    MARC field 300\$c (physical description)[https://www.loc.gov/marc/bibliographic/bd300.html]
   - `description2`
+    MARC field 310\$a (publication frequency)[https://www.loc.gov/marc/bibliographic/bd310.html]
   - `description3`
+    MARC field 360\$ (pub dates or sequential designation)[https://www.loc.gov/marc/bibliographic/bd362.html]. Great for serials.
   - `norm_author`
+    Normalized author
   - `norm_title`
+    Normalized title
   - `author`
   - `title`
   - `num_copies_from_bib`
+    A fixed field in database. Not sure what it is.
   - `topical_terms`
+    Semicolon-delimited list of topical terms (MARC 650\$a). [See this page for more info](https://www.loc.gov/marc/bibliographic/bd650.html)
   - `gen_subdiv_term`
+    Semicolon-delimited list of general subdivisions (MARC 650\$x). [See this page for more info](https://www.loc.gov/marc/bibliographic/bd650.html)
   - `form_subdiv_term`
+    Semicolon-delimited list of form subdivisions (MARC 650\$v). [See this page for more info](https://www.loc.gov/marc/bibliographic/bd650.html)
   - `index_term`
+    Index term, genre/form (MARC 655\$a) [See this page for more info](https://www.loc.gov/marc/bibliographic/bd655.html)
   - `geo_terms`
+    Geographical terms (MARC 651\$a) [See this page for more info](https://www.loc.gov/marc/bibliographic/bd651.html)
   - `hasmultbibids`
+    Does the item have multiple bibids?
   - `item_location_code`
   - `item_location_str`
   - `barcode`
   - `item_callnum`
+    Another place where the __NYPL__ call number may be
   - `created_date`
   - `total_checkouts`
   - `total_renewals`
   - `total_circ`
+    total checkouts + total renewals
   - `fy17_checkouts`
   - `fy18_checkouts`
   - `fy19_checkouts`
   - `fy20_checkouts`
   - `bib_fy17_checkouts`
+    Sum of FY17 checkouts for all items under bibid (very useful)
   - `bib_fy18_checkouts`
+    Sum of FY18 checkouts for all items under bibid (very useful)
   - `bib_fy19_checkouts`
+    Sum of FY19 checkouts for all items under bibid (very useful)
   - `bib_fy20_checkouts`
+    Sum of FY20 checkouts for all items under bibid (very useful)
   - `bib_total_checkouts`
+    Sum of total checkouts for all items under bibid (very useful)
   - `bib_total_renewals`
+    Sum of total renewals for all items under bibid (very useful)
   - `bib_total_circ`
+    Sum of total checkouts __and__ renewals for all items under bibid (very useful)
 
 
