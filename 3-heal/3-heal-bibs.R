@@ -8,8 +8,8 @@ library(data.table)
 library(magrittr)
 library(stringr)
 library(pbapply)
-source("./bibcodes.R")
-source("./utils.R")
+source("../utils/bibcodes.R")
+source("../utils/utils.R")
 
 
 

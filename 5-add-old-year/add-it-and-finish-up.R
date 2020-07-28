@@ -13,7 +13,7 @@ library(data.table)
 library(magrittr)
 library(stringr)
 
-source("./utils.R")
+source("../utils/utils.R")
 # ------------------------------ #
 
 
