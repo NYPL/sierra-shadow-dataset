@@ -1,0 +1,4 @@
+
+# NYPL SHADOW EXPORT
+
+(stub)
