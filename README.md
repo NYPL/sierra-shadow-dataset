@@ -1,11 +1,72 @@
 
-# NYPL Shadow Dataset Generation
+# NYPL Sierra Shadow Dataset Generation
 
 ## Introduction
 
 [See bottom of README for a listing of columns and descriptions.](#columns-and-data-dictionary)
 
+This is the code to join sql_dumps of the Sierra data replica postgresql
+`bib` and `item` database tables. In the process, the internal JSON
+fields are pulled apart and the most relevant information is extracted.
+In addition, there's extensive data cleanup and consolidation, especially
+with control numbers. For example, all MARC fields where the OCLC number
+might live (a great deal) are interrogated and consolidated so you, dear
+reader, don't have to.
+
 ## Why?
+
+The access to the `bib` and `item` replica tables are invaluable for
+understanding our collections. Prior to this, assessment types had
+to create Sierra reports/list that (a) often required very computationally
+expensive table joins, and (b) might have required reserving "buckets" of
+a size that wasn't determinable _a priori_.
+
+Using the replica tables directly, however, isn't a panacea, for a few
+reasons...
+
+  - Having the database hit by all interested assessment types might put
+    undue stress on the server. Especially, if there's a lot of duplicated,
+    or nearly identical, queries.
+
+  - Columns of JSON type (while absolutely awesome) are difficult for
+    users used to traditional RDB SQL to work with, and almost always
+    requires post-query manipulation, anyway.
+
+__Most importantly...__
+
+  - The `item` and `bib` tables live in different PostgreSQL servers.
+    So, in order to, say, get circulation (item info) statistics for all
+    items in a certain language, or within a certain subject (bib
+    information), the tables can't be joined on `itemid` within one database
+    cluster. Instead, essentially, all required columns from each table
+    would have to be queried, save, and joined on the user's local machine.
+
+Given that the need to join item and bib information is so high, it makes
+sense to, at periodic intervals, perform an `sql_dump` on each table and
+join it once and share it with all interested parties.
+
+Although the `sql_dump` is an expensive operation, this only has to be
+done once every once in a while. The end result is _much_ less strenuous
+for the servers _and_ much easier for the person doing the assessment.
+
+It should be noted that the sql exports total over 100GB and joining
+all this data will easily outstrip all the RAM available on commodity
+hardware. Each time this process this process (in the repo) is run, it
+requires provisioning a AWS EC2 instance with at least 64GB of RAM.
+But, as mentioned, this only has to be done once and everybody can share
+it.
+
+Finally, in order to get the most complete bibliographic metadata, some
+(a) really arcane MARC know-how has to be used, and (b) a fair bit of
+institution-specific knowledge about the idiosyncracies of our metadata
+is required. For example, the OCLC number can (as is) stored in no fewer
+than three different MARC fields. The appropriate number may be stored in
+any one of these locations.
+
+As we learn more, and consult with metadata experts, appropriate changes
+and extentions can by made to this code and we can all benefit from the
+same MARC field interrogations and manipulations.
+
 
 ## Where can I get the dataset(s)?
 It lives on a shared NYPL drive named `NYPL Shadow Dataset`.
@@ -38,13 +99,14 @@ All of the files above include the date of the database(s) export before
 the file extension. As of time of writing this is 2020-07-23.
 
 The serialized (and heavily compressed) `.datatable` files can be read
-from R using the following incantation
+from R using the following incantation in R:
 
 ```
 whatever <- readRDS("./thefile.datatable")
 ```
 
 Other formats may be included if other people find that it would be useful.
+(Heavily) compressed CSV/TSV, feather, sqlite file, whatever.
 
 ## Development stack
 
