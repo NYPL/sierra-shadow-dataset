@@ -61,7 +61,7 @@ Finally, in order to get the most complete bibliographic metadata, some
 institution-specific knowledge about the idiosyncracies of our metadata
 is required. For example, the OCLC number can (as is) stored in no fewer
 than three different MARC fields. The appropriate number may be stored in
-any one of these locations.
+any one (or none) of these locations.
 
 As we learn more, and consult with metadata experts, appropriate changes
 and extentions can by made to this code and we can all benefit from the
@@ -96,7 +96,7 @@ There you'll find...
     yield FY17-to-FY20 circ information for every NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is 2020-07-23.
+the file extension. As of time of writing this is __2020-07-23__.
 
 The serialized (and heavily compressed) `.datatable` files can be read
 from R using the following incantation in R:
@@ -140,22 +140,63 @@ upstream repository.
 
 Step 1
 -----
-stub
+This first step consumes the sqldumps and does most of the teasing apart
+of the most relevant information.
+
+The bib and item scripts (which are separated) consume data, line-by-line,
+from standard input. This obviates the need to read and store the whole
+file in memory, and uses very little RAM.
+
+The data can be fed into the scripts directly from the gzipped SQL dumps
+like so...
+
+```
+$ zcat sierra-bib-dump-2020-07-23.sql.gz | ./export-bib-info-first-step.py
+$ # and similar for the item dump
+```
+
+These is a crude progress indicator for each script.
+
+At the end, two files (`exported-bibs-raw-from-python.txt` and
+`exported-items-raw-from-python.txt`) are spit out and ready to be consumed
+by the process in the next stage.
 
 
 Step 2
 -----
-stub
+This consumes the two exports from the previous step, does a little bit
+of filtering, and joins the two data tables on `itemid`. This is the
+step that requires a special memory-optimized EC2 instance to run.
+
+The output is `bib-sierra-comb.datatable`.
 
 
 Step 3 (and 4)
 -----
-stub
+In step 3, the ISBNs (converted to ISBN13s) and ISSN are remediated and
+verified. The process is parallelized (using the `pbapply` package) but
+still takes over 30 min to run using 6 threads.
 
+Step 4 remediates the LCCN and OCLC numbers, and joins the remediated ISBNs
+and ISSNs back in. If there are multiple control numbers for any of these
+types, they are deduplicated and the unique numbers are joined and delimited
+by semicolons.
+
+`big-healed-sierra-comb.datatable` is ready for the final stage.
 
 Step 5
 -----
-stub
+This last stage joins previous years' circulation data into the mix. At
+time of writing, FY17 and FY18 circulation numbers are thrown in with the
+complete FY19 and FY20 numbers, creating four consecutive years with
+by-year circulation information. 
+
+Additionally, all of the items under each `bibid` have all of their
+circulation numbers summed. This means, that for each row (unique `bibid`
+and `itemid`) we have the circulation data for the specific item _and_
+the circulation data for the title. The latter numbers are, of course,
+identical for each item under the title. This is especially useful for
+serials and branch titles.
 
 
 ## Columns and data dictionary
