@@ -1,5 +1,18 @@
 
--
+
 - Add vagrantfile to set up an environment with everything needed to run this?
 
+- The publication date is in shambles. For example, in the creation scripts
+  for the dashboard, I have to run the following code..
+
+```{r}
+dat[!is.na(pub_year) & pub_year > 2019, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000, .(pub_year)]
+dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000 & pub_year > 201, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000, pub_year:=as.integer(10*pub_year)]
+```
+
+Let's upstream this
 
