@@ -29,6 +29,8 @@ fissn <- fread("./fixed-issns-maybe3.txt", colClasses="character", na.strings=c(
 fisbn[, .N]
 fissn[, .N]
 dat[, .N]
+# 2021-03-18:	15,685,664
+
 
 dat[bibid!=fisbn[, bibid]]
 dat[itemid!=fisbn[, itemid]]
@@ -36,8 +38,8 @@ dat[itemid!=fisbn[, itemid]]
 dat[bibid!=fissn[, bibid]]
 dat[itemid!=fissn[, itemid]]
 
-# dat[1:1000,][, .(isbn, fisbn[, fixed.isbns.maybe])]
 
+# next time, ¿should I save the old ones?
 fissn[, fixed.issns.maybe] -> tmp
 dat[, fisbn:=fisbn[, fixed.isbns.maybe]]
 dat[, issn:=tmp]
@@ -46,8 +48,7 @@ dat[, fisbn:=NULL]
 
 dat %>% names
 
-# delcols(dat, "location")
-
+dat[bibid=="20869063"]
 
 rm(fisbn)
 rm(fissn)
@@ -64,12 +65,13 @@ dat[lccn=="###00000000#", lccn:=NA]
 
 
 dat[, .N, !is.na(oclc)]
+  ## 2021-03-18
+   #  is.na        N
+   # <lgcl>    <int>
+   # 1:  FALSE  5522267
+   # 2:   TRUE 10163397
+   #
 dat[!is.na(oclc), .(oclc)]
-
-# dat[str_detect(oclc, ";"), .(oclc)][1:30]
-# dat[!str_detect(oclc, "NYPG") & str_detect(oclc, "[A-Za-z]"), .(oclc)][1:30]
-# dat[!str_detect(oclc, "NYPG") & !str_detect(oclc, "[Bb]$") & str_detect(oclc, "[A-Za-z]"), .(oclc, clean_oclc(oclc))][1:30]
-# dat[!str_detect(oclc, "NYPG") & !str_detect(oclc, "[Bb]$") & str_detect(oclc, "[A-Za-z]"), .N]
 
 
 clean_oclc <- function(astrings){
@@ -100,9 +102,9 @@ handle_multiple_oclc <- function(astrings){
 
 gc()
 
-# 16 minutes
+# 15 minutes
   system.time(
-dat[, pbsapply(oclc, handle_multiple_oclc, USE.NAMES=FALSE, cl=6)] -> hope
+dat[, pbsapply(oclc, handle_multiple_oclc, USE.NAMES=FALSE, cl=9)] -> hope
   )
 
 dat[, foclc:=hope]
@@ -116,6 +118,18 @@ rm(hope)
 gc()
 
 
+
+
+# NOW ON TO DATES
+dat[!is.na(pub_year) & pub_year > 2021, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000 & pub_year > 201, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000, pub_year:=as.integer(10*pub_year)]
+
+#### THIS IS TERRIBLE. GET IT FROM THE 008 FIELD INSTEAD
+## or in addition
+## or maybe not
 
 
 

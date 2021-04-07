@@ -96,7 +96,7 @@ There you'll find...
     yield FY17-to-FY20 circ information for every NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2020-07-23__.
+the file extension. As of time of writing this is __2021-03-18__.
 
 The serialized (and heavily compressed) `.datatable` files can be read
 from R using the following incantation in R:
@@ -155,7 +155,7 @@ $ zcat sierra-bib-dump-2020-07-23.sql.gz | ./export-bib-info-first-step.py
 $ # and similar for the item dump
 ```
 
-These is a crude progress indicator for each script.
+There is a crude progress indicator for each script.
 
 At the end, two files (`exported-bibs-raw-from-python.txt` and
 `exported-items-raw-from-python.txt`) are spit out and ready to be consumed
@@ -189,7 +189,7 @@ Step 5
 This last stage joins previous years' circulation data into the mix. At
 time of writing, FY17 and FY18 circulation numbers are thrown in with the
 complete FY19 and FY20 numbers, creating four consecutive years with
-by-year circulation information. 
+by-year circulation information.
 
 Additionally, all of the items under each `bibid` have all of their
 circulation numbers summed. This means, that for each row (unique `bibid`
@@ -241,7 +241,8 @@ serials and branch titles.
 
   - `pub_year`
 
-    Beware that some of these are 9999 and lower than 199. This cannot be rectified without further information (TODO)
+    Publication years that are obviously errors are made NA. In future years, this
+    may use the one in the 008 field, instead, but that's controversial.
 
   - `catalogdate`
 

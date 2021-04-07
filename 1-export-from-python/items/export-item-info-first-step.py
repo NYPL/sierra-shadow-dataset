@@ -8,10 +8,12 @@ import fileinput
 
 
 
-# 2020-07-23!
-TOTAL_LINES = 35327625
+TOTAL_LINES = 36444424
 
-## QUESTIONS: Why are there fewer item rows? old: 35617929
+# 2020-07-23:   35,327,625
+# 2021-03-18:   36,444,424    (+ 1,116,800)
+
+## QUESTION (2020-07): Why are there fewer item rows? old: 35617929
 
 def cop_out(f):
     def inner(*args, **kargs):
@@ -183,6 +185,6 @@ print("CLOSED FILE HANDLES.... COMPLETED SUCCESSFULLY")
 
 
 
-# 2020-07-23:   yieled 24,534,876
-# 2019-12:             24,393,264
-
+# 2019-12-??:       24,393,264
+# 2020-07-23:       24,534,876
+# 2021-03-18:       23,996,928    (uh oh)
