@@ -14,7 +14,8 @@ library(magrittr)
 library(stringr)
 library(pbapply)
 
-source("../utils/bibcodes.R")
+library(libbib)   # version 0.5 (commit: 9f1598b7d1adf) [in dependencies folder]
+
 source("../utils/utils.R")
 # ------------------------------ #
 
