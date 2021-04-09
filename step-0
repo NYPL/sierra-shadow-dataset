@@ -1,0 +1,46 @@
+
+# don't forget to change username to yours
+
+$ time pg_dump --host="bib-service-production-rep.cvy7z512hcjg.us-east-1.rds.amazonaws.com" --port=5432 --dbname="bib_service_production" --table=bib --user=apfischetti > full-bib-dump.sql
+
+$ time pg_dump --host="item-service-production-rep.cvy7z512hcjg.us-east-1.rds.amazonaws.com" --port=5432 --dbname="item_service_production" --table=item --user=apfischetti > full-item-dump.sql
+
+-----BEGIN PGP MESSAGE-----
+
+jA0ECQMKzWm6daz1mTj/0kgBi7wKoWwU9lAx5K1NAgFfPjreTDnfvmsXwY53M2/h
+9PbiVJWU6pOX1/GYnhUdhymHcIESkvNKTveYcn5Lo557rfbzn0aCFQA=
+=btJh
+-----END PGP MESSAGE-----
+
+
+
+#### My idiosyncratic info for 2021-04-08:
+
+### BIBS
+took 3.1 hours
+User-mode: 353.90s      Kernel-mode: 646.33s    Wall: 11299.17s Perc: 8%
+It's 100 GBs.
+It took (wc -l) three minites to reveal it has 18,077,746 lines
+
+now using pigz to compress it
+$ time pigz -k full-bib-dump.sql
+
+Parallelized over 12 cores (4.6 GHz) to took 4.3 minutes
+100 GB -> 11 GB
+
+
+### ITEMS
+User-mode: 383.42s      Kernel-mode: 690.56s    Wall: 10605.95s Perc: 10%
+2.9 hours
+84 Gb
+
+$ time wc -l full-item-dump-2021-03-18.sql
+35,716,610
+
+$ time pigz full-item-dump-2021-03-18.sql
+User-mode: 969.32s      Kernel-mode: 50.40s     Wall: 183.03s       Perc: 557%
+4.3G    full-item-dump-2021-03-18.sql.gz
+
+
+
+

@@ -17,11 +17,11 @@ source("../utils/utils.R")
 dat <- readRDS("../2-join-them/big-sierra-comb.datatable")
 
 dat[,.N]
-# 2021-03-18:	15,685,664    (probably a problem)
+# 2021-04-08:	15,715,406
 
-dat[bibid=="20869063"]
 
-# keepcols(dat, c("bibid", "itemid", "isbn", "issn", "lccn", "oclc"))
+dat[bibid=="20869063"] # :)
+
 keepcols(dat, c("bibid", "itemid", "isbn", "issn"))
 gc()
 
@@ -40,7 +40,7 @@ handle_multiple_isbn <- function(astring){
 
 
 
-# 15 minutes
+# 13 minutes
   system.time(
 dat[, pbsapply(isbn, handle_multiple_isbn, USE.NAMES=FALSE, cl=11)] -> hope
   )

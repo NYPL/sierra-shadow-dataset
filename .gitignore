@@ -5,7 +5,7 @@
 *.RData
 *.txt
 ./1-export-from-python/items/exported-items-raw-from-python.txt
-./1-export-from-python/items/errors.txt
+./1-export-from-python/items/item-error-log.txt
 ./1-export-from-python/bibs/exported-bibs-raw-from-python.txt
 ./3-heal/fixed-isbns-maybe3.txt
 ./3-heal/fixed-issns-maybe3.txt

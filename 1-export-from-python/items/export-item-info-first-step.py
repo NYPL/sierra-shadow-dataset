@@ -8,12 +8,32 @@ import fileinput
 
 
 
+DEBUG = True
+
+SKIPPED_BECAUSE_NOT_15_FIELDS = 0
+SKIPPED_BECAUSE_DELETED_ITEM = 0
+SKIPPED_BECAUSE_FIXED_FIELD_CANT_LOAD = 0
+SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH = 0
+
+LINES_EXPORTED = 0
+
+OUTFILE = "./exported-items-raw-from-python-2021-04-08.txt"
+ERRFILE = "./item-error-log.txt"
+ofh = open(OUTFILE, "w")
+efh = open(ERRFILE, "w")
+
 TOTAL_LINES = 36444424
 
 # 2020-07-23:   35,327,625
 # 2021-03-18:   36,444,424    (+ 1,116,800)
 
 ## QUESTION (2020-07): Why are there fewer item rows? old: 35617929
+
+def debug(linenum, line, reason):
+    if DEBUG:
+        # print(astr, file=sys.stderr)
+        efh.write("Failure on line {}\nReason: {}\nLine: {}\n\n".format(linenum, reason, line))
+        efh.flush()
 
 def cop_out(f):
     def inner(*args, **kargs):
@@ -110,10 +130,8 @@ def cop_location(apiece):
     return (code, strng)
 
 
-def WRITE_IT(ofh, astr, debug=False):
+def WRITE_IT(ofh, astr):
     ofh.write("{}\n".format(astr))
-    if debug:
-        print(astr)
 
 
 
@@ -126,10 +144,6 @@ HEADER = '\t'.join(["itemid", "bibid_dp", "hasmultbibids",
                     "this_year_circ_dp", "itype_dp",
                     "created_date_dp"])
 
-OUTFILE = "./exported-items-raw-from-python.txt"
-ERRFILE = "./errors.txt"
-ofh = open(OUTFILE, "w")
-efh = open(ERRFILE, "w")
 
 
 WRITE_IT(ofh, HEADER)
@@ -143,11 +157,19 @@ for currentline in fileinput.input():
         perc = round(COUNTER/TOTAL_LINES*100, 2)
         print("{} of {}...\t\t{}%".format(COUNTER, TOTAL_LINES, perc))
 
+    # NO
+    # if COUNTER > 1000000:
+    #     break
+
     raw_fields = currentline.split("\t")
     if len(raw_fields) != 15:
+        debug(COUNTER, currentline, "NOT length 15")
+        SKIPPED_BECAUSE_NOT_15_FIELDS += 1
         continue
 
     if raw_fields[4]=="t":
+        debug(COUNTER, currentline, "Deleted item")
+        SKIPPED_BECAUSE_DELETED_ITEM += 1
         continue
 
     location                    = get_loc_code(raw_fields[6])
@@ -159,8 +181,12 @@ for currentline in fileinput.input():
     try:
         fixed                   = json.loads(raw_fields[11])
     except:
+        debug(COUNTER, currentline, "failure to load fixed fields")
+        SKIPPED_BECAUSE_FIXED_FIELD_CANT_LOAD += 1
         continue
     if not len(fixed):
+        debug(COUNTER, currentline, "fixed fields are empty")
+        SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH += 1
         continue
     itype                       = get_itype(fixed)
     total_circ                  = get_total_circ(fixed)
@@ -178,11 +204,19 @@ for currentline in fileinput.input():
                         this_year_circ, itype, created_date])
 
     WRITE_IT(ofh, outstr)
+    LINES_EXPORTED += 1
 
 
 ofh.close()
 print("CLOSED FILE HANDLES.... COMPLETED SUCCESSFULLY")
 
+
+print("SKIPPED_BECAUSE_NOT_15_FIELDS:               {}".format(SKIPPED_BECAUSE_NOT_15_FIELDS))
+print("SKIPPED_BECAUSE_DELETED_ITEM:                {}".format(SKIPPED_BECAUSE_DELETED_ITEM))
+print("SKIPPED_BECAUSE_FIXED_FIELD_CANT_LOAD:       {}".format(SKIPPED_BECAUSE_FIXED_FIELD_CANT_LOAD))
+print("SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH:   {}".format(SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH))
+print("")
+print("LINES EXPORTED:                              {}".format(LINES_EXPORTED))
 
 
 # 2019-12-??:       24,393,264

@@ -48,10 +48,9 @@ dat[bibid=="11061659", .(title, total_checkouts_dp, total_renewals_dp, last_year
 old[bibid=="13967181"]
 dat[bibid=="13967181", .(title, total_checkouts_dp, total_renewals_dp, last_year_circ_dp, this_year_circ_dp)]
 
-  # philosophical theology of jonathong edwards
-  # the life and theology of the founder of middle knowledge (loiuous molina)
-  # [isbn:9780310516972]
-# introduction to the phil. of inductuion and probability
+# :)
+old[bibid=="20869063"]
+dat[bibid=="20869063", .(title, total_checkouts_dp, total_renewals_dp, last_year_circ_dp, this_year_circ_dp)]
 
 
 
@@ -91,7 +90,7 @@ comb %>% names %>% str_replace("_dp$", "") -> thenewnames
 setnames(comb, thenewnames)
 comb %>% names
 
-comb[itype<100, branch_or_research:="research"]
+comb[itype<=100, branch_or_research:="research"]
 comb[itype>100, branch_or_research:="branch"]
 
 comb[, paste(unique(branch_or_research), sep=";", collapse=";"), bibid] -> tmp
@@ -162,7 +161,7 @@ gc()
 
 research[, .N]
 # 2020-07-23: 10,895,556
-# 2021-03-18: 10,878,416 (before fixing!!!)
+# 2021-03-18: 10,888,765
 
 
 
@@ -202,4 +201,5 @@ research %>% merge(agg, all.x=TRUE) -> big
 
 
 big[bibid=="12453190", ]
+
 big %>% saveRDS("../target/sierra-research-healed-joined.datatable")

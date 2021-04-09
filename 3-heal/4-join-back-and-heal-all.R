@@ -29,7 +29,7 @@ fissn <- fread("./fixed-issns-maybe3.txt", colClasses="character", na.strings=c(
 fisbn[, .N]
 fissn[, .N]
 dat[, .N]
-# 2021-03-18:	15,685,664
+# 2021-03-18:	15,715,406
 
 
 dat[bibid!=fisbn[, bibid]]
@@ -48,7 +48,7 @@ dat[, fisbn:=NULL]
 
 dat %>% names
 
-dat[bibid=="20869063"]
+dat[bibid=="20869063"] # :)
 
 rm(fisbn)
 rm(fissn)
@@ -65,12 +65,11 @@ dat[lccn=="###00000000#", lccn:=NA]
 
 
 dat[, .N, !is.na(oclc)]
-  ## 2021-03-18
+  ## 2021-04-08
    #  is.na        N
    # <lgcl>    <int>
-   # 1:  FALSE  5522267
-   # 2:   TRUE 10163397
-   #
+   # 1:  FALSE  5533432
+   # 2:   TRUE 10181974
 dat[!is.na(oclc), .(oclc)]
 
 

@@ -96,7 +96,7 @@ There you'll find...
     yield FY17-to-FY20 circ information for every NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2021-03-18__.
+the file extension. As of time of writing this is __2021-04-08__.
 
 The serialized (and heavily compressed) `.datatable` files can be read
 from R using the following incantation in R:

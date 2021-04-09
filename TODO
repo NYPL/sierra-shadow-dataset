@@ -1,4 +1,7 @@
 
+- Step 6 (enrich LC Calls and get subjects)
+  (need to finish libbib)
+
 - Get the pub year from the 008 field, instead
     or, better, use whichever one looks more valid
 fix entry in README.md

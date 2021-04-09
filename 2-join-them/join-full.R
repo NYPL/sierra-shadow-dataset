@@ -28,12 +28,12 @@ items <- fread("../1-export-from-python/items/exported-items-raw-from-python.txt
 # using 29 GB of RAM now
 
 bibs[, .N]
-# 15,979,458 (2021-03)
+# 15,996,119 (2021-04)
 # 15,770,812 (2020-07)
 # 15,525,387 (2019-12)
 # 15,364,558 (2019-10)
 items[, .N]
-# 23,996,927 (2021-03)   [uh oh!]
+# 24,033,693 (2021-04)   [uh oh!]
 # 24,534,875 (2020-07)
 # 24,393,263 (2019-12)
 # 24,349,304 (2019-10)
@@ -63,6 +63,11 @@ items[, initemtable:=TRUE]
 bibs %>% merge(items, all=TRUE) -> comb
   )
 
+# rm(bibs)
+# gc()
+# rm(items)
+# gc()
+
 # now using 41 GB of memory
 
 comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
@@ -80,20 +85,26 @@ comb[itemid=="14021710"]
 
 
 comb <- comb[inbibtable==TRUE]
+# wait, ¿then why did I do a full join?
 
 comb <- comb[!is.na(itype_dp),]
 
 # using 49 GBs of memory
 
 comb[, .N]
-# 15,685,664		(2021-03)
+# 15,715,406    (2021-04)
 # 16,243,897		(2020-07)
 
 
-comb[, .N, itype_dp<100]
-# 10,878,416		(2021-03)   [I guess we lost research items, too?]
+comb[, .N, itype_dp<=100]
+# 10,888,765    (2021-04)   [I guess we lost research items, too?]
 # 10,895,556		(2020-07)
 
+# but I guess it was only 6,791
 
+
+  system.time(
 comb %>% saveRDS("./big-sierra-comb.datatable")
+  )
+# 5.1 minutes
 
