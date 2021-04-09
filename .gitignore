@@ -1,5 +1,6 @@
 *.xz
 *.gz
+!dependencies/libbib_0.5.tar.gz
 *.zpaq
 *.datatable
 *.RData
