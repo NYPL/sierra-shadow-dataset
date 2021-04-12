@@ -1,0 +1,10 @@
+
+2021-04-08
+  - added LC subject classifications/subclassifications to research target
+    (in step 5)
+  - notes for exporting sql dump in implied step 0
+  - uses libbib (on CRAN) instead of copied bibcodes.R
+  - historical circulation data includes FY17,18,19 meaning
+    circulation stats are available from FY17 to FY21 (so far)
+  - various code/target enhancements
+  - fewer items but that's how it goes

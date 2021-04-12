@@ -9,9 +9,11 @@ library(data.table)
 library(magrittr)
 library(stringr)
 library(pbapply)
+
+library(libbib)   # version 1.0 on CRAN
+
 source("../utils/utils.R")
 
-library(libbib)   # version 0.5 (commit: 9f1598b7d1adf) [in dependencies folder]
 
 
 dat <- readRDS("../2-join-them/big-sierra-comb.datatable")

@@ -14,7 +14,7 @@ library(magrittr)
 library(stringr)
 library(pbapply)
 
-library(libbib)   # version 0.5 (commit: 9f1598b7d1adf) [in dependencies folder]
+library(libbib)   # version 1.0 (on CRAN)
 
 source("../utils/utils.R")
 # ------------------------------ #
@@ -62,8 +62,6 @@ dat[!is.na(lccn) & lccn=="", .(lccn)]
 dat[lccn=="", lccn:=NA]
 
 dat[!is.na(lccn), .(lccn)]
-dat[lccn=="###00000000#", lccn:=NA]
-
 
 dat[, .N, !is.na(oclc)]
   ## 2021-04-08

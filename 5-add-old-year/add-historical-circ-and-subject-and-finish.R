@@ -13,6 +13,8 @@ library(data.table)
 library(magrittr)
 library(stringr)
 
+library(libbib)         # version 1.0 (on CRAN)
+
 source("../utils/utils.R")
 # ------------------------------ #
 
@@ -150,18 +152,23 @@ rm(comb)
 rm(agg)
 gc()
 
-big[branch_or_research=="branch"] %>% saveRDS("../target/sierra-branch-healed-joined.datatable")
+big[branch_or_research=="branch"] -> branch
+branch %>% saveRDS("../target/sierra-branch-healed-joined.datatable")
+
+
 big %>% saveRDS("../target/sierra-all-healed-joined.datatable")
+
 
 
 research <- big[branch_or_research=="research"]
 rm(big)
+rm(branch)
 gc()
 
 
 research[, .N]
 # 2020-07-23: 10,895,556
-# 2021-03-18: 10,888,765
+# 2021-04-08: 10,888,765
 
 
 
@@ -200,6 +207,22 @@ delcols(research, tmp)
 research %>% merge(agg, all.x=TRUE) -> big
 
 
-big[bibid=="12453190", ]
+research[bibid=="12453190", ]
+
+
+## ADDING LC SUBJECT CLASSIFICATIONS!
+
+research[, lc_suject_classification:=get_lc_call_subject_classification(lccall)]
+
+research[, lc_suject_subclassification:=get_lc_call_subject_classification(lccall,
+                                                                           subclassification=TRUE)]
+
+research[!is.na(lccall), .(lccall, lc_suject_classification, lc_suject_subclassification)]
+
+research %>% pivot("lc_suject_classification", .N)
+
+
 
 big %>% saveRDS("../target/sierra-research-healed-joined.datatable")
+
+

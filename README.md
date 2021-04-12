@@ -112,6 +112,7 @@ Other formats may be included if other people find that it would be useful.
 
 The following R packages are needed
 
+  - libbib
   - data.table
   - magrittr
   - pbapply
@@ -186,10 +187,10 @@ by semicolons.
 
 Step 5
 -----
-This last stage joins previous years' circulation data into the mix. At
-time of writing, FY17 and FY18 circulation numbers are thrown in with the
-complete FY19 and FY20 numbers, creating four consecutive years with
-by-year circulation information.
+This final stage joins previous years' circulation data into the mix. At
+time of writing, FY17, FY18 and FY19 circulation numbers are thrown in
+with the complete FY20 and FY21 numbers, creating five consecutive years
+with by-year circulation information.
 
 Additionally, all of the items under each `bibid` have all of their
 circulation numbers summed. This means, that for each row (unique `bibid`
@@ -197,6 +198,12 @@ and `itemid`) we have the circulation data for the specific item _and_
 the circulation data for the title. The latter numbers are, of course,
 identical for each item under the title. This is especially useful for
 serials and branch titles.
+
+Lastly, the LC subject classification and subclass is added to the
+research target.
+
+A planned enhancement is adding subject information to branch items
+using Dewey
 
 
 ## Columns and data dictionary
@@ -435,5 +442,13 @@ serials and branch titles.
   - `bib_total_circ`
 
     Sum of total checkouts __and__ renewals for all items under bibid (very useful)
+
+  - `lc_subject_classification` (RESEARCH TARGET ONLY)
+
+    The LC subject classification from first letter of LC call number
+
+  - `lc_subject_subclassification` (RESEARCH TARGET ONLY)
+
+    The LC subject _sub_ classification from all letters of LC call number
 
 

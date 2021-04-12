@@ -1,17 +1,14 @@
 
-- Step 6 (enrich LC Calls and get subjects)
-  (need to finish libbib)
-
 - Get the pub year from the 008 field, instead
     or, better, use whichever one looks more valid
-fix entry in README.md
+    fix entry in README.md
 
 - Next time, consider using a format that's faster to
     read/write than RDS
 
 - Add vagrantfile to set up an environment with everything needed to run this?
 
-- The publication date is in shambles. For example, in the creation scripts
-  for the dashboard, I have to run the following code..
+- getting lccall from other places would be nice
 
+- A dewey to subject in libbib (and here) would be nice
 
