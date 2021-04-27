@@ -201,36 +201,30 @@ Step 3 concerns itself with data remediates... and, gee, is there a lot
 to remediate. The columns modified here are
 
   - `isbn`
-    This
 
   - `issn`
-    This
 
   - `lccn`
-    This
 
   - `oclc`
-    This
 
   - `date`
-    This
 
-Adds subjects and labels items and "research" or "branch"
+If there are multiple control numbers for any of these (ISBN, ISSN, OCLC,
+LCCN) they are deduplicated and the unique numbers are joined and delimited
+by semicolons.
+
+This step also adds subjects from Dewey and LC Calls and labels items and
+"research" or "branch"
 
 This step, too, requires a powerful EC2 instance with a lot of cores unless
 you have an unreasonably powerful computer.
 
+It'll take hours no matter what
 
-In step 3, the ISBNs (converted to ISBN13s) and ISSN are remediated and
-verified. The process is parallelized (using the `pbapply` package) but
-still takes over 30 min to run using 6 threads.
+The output, `./3-heal/target/big-healed-sierra-comb-just-two-years.dat.gz`
+is now ready for the final stage.
 
-Step 4 remediates the LCCN and OCLC numbers, and joins the remediated ISBNs
-and ISSNs back in. If there are multiple control numbers for any of these
-types, they are deduplicated and the unique numbers are joined and delimited
-by semicolons.
-
-`big-healed-sierra-comb.datatable` is ready for the final stage.
 
 Step 4
 -----
@@ -246,11 +240,10 @@ the circulation data for the title. The latter numbers are, of course,
 identical for each item under the title. This is especially useful for
 serials and branch titles.
 
-Lastly, the LC subject classification and subclass is added to the
-research target.
 
-A planned enhancement is adding subject information to branch items
-using Dewey
+MENTION FINAL TARGET
+
+AND LOOK OVER COLUMNS!!
 
 
 ## Columns and data dictionary
@@ -342,11 +335,12 @@ using Dewey
 
   - `lccall`
 
-    Library of Congress call number. [Can be used for subject analysis.](https://www.loc.gov/catdir/cpso/lcco/) 56% present.
+    Library of Congress call number.
 
   - `callnum2`
 
-    Dewey/branch call numbers. 99.7% present for branch items. [Can be used for subject analysis](https://www.oclc.org/content/dam/oclc/dewey/resources/summaries/deweysummaries.pdf)
+    Dewey/branch call numbers. 99.7% present for branch items. Only 30%
+    after cleaning and removing non-dewey fiction call numbers
 
   - `v852a`
 

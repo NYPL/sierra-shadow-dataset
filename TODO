@@ -1,14 +1,20 @@
 
-- Get the pub year from the 008 field, instead
-    or, better, use whichever one looks more valid
-    fix entry in README.md
+- There might be a problem with 008 field export
+        > dat[, .(oh08, nchar(oh08))][, .N, V2]
+              V2        N
+           <int>    <int>
+        1:    46 15588858
+        2:    NA   115600
+        3:    44    10944
+        4:    45        1
+        5:    64        1
+        6:    54        1
+        7:    57        1
+  ¿Why?
 
-- Next time, consider using a format that's faster to
-    read/write than RDS
+- ¿Do I trust the OCLC numbers?
 
 - Add vagrantfile to set up an environment with everything needed to run this?
 
 - getting lccall from other places would be nice
-
-- A dewey to subject in libbib (and here) would be nice
 

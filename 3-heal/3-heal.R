@@ -27,14 +27,9 @@ library(pbapply)
 
 
 
-system.time(    # REMOVE
+# around 3 minutes
 dat <- fread("../2-join-them/target/big-sierra-comb.dat.gz",
              strip.white=FALSE)
-)
-
-dat[,.N]
-# 2021-04-08:	15,715,406
-
 
 dat[bibid=="20869063"] # :)
 
@@ -51,7 +46,8 @@ dat[!is.na(isbn),
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
                                   cl=9)]
-# 39 minutes
+#    39 minutes
+# or 24 minutes
 
 # --------------------------------------------------------------- #
 
@@ -96,113 +92,38 @@ dat[!is.na(oclc),
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
                                   cl=7)]
-# 30 minutes
+#    30 minutes
+# or 18 minutes
+
 
 # --------------------------------------------------------------- #
-
 
 ###########
 ####  DATES
 
-system.time(
-dat[, tmpdate:=marc_008_get_info(oh08)[,pub_date]]
-)
+# getting the date from the 008 is a dead end
 
-dat %>% dt_percent_not_na("pub_year")
-dat %>% dt_percent_not_na("tmpdate")
-
-dat[pub_year!=tmpdate, .(bibid, pub_year, tmpdate)]
-
-
-# --------------------------------------------------------------- #
-
-
-##########################
-####  CALL NUMBER SUBJECTS
-
-## BEGIN DEWEY
-
-dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
-## 2021-04
-dat[,.N, is.na(dewey_class)]
-#     is.na        N
-#    <lgcl>    <int>
-#    1:   TRUE 14208875
-#    2:  FALSE  1,506,531
-dat[!is.na(dewey_class)] %>% dt_counts_and_percents("dewey_class")
-#                                     dewey_class     val percent
-#                                          <char>   <int>   <num>
-#  1: Social sciences, sociology and anthropology  316626   21.02
-#  2:                                  Technology  272622   18.10
-#  3:                                     History  222334   14.76
-#  4:                                     Science  184633   12.26
-#  5:                                        Arts  175958   11.68
-#  6:    Literature (Belles-lettres) and rhetoric  123444    8.19
-#  7:                   Philosophy and psychology   65595    4.35
-#  8:                                    Language   51004    3.39
-#  9:     Computer science, knowledge and systems   50257    3.34
-# 10:                                    Religion   44058    2.92
-# 11:                                       TOTAL 1506531  100.00
-
-dat[, dewey_division:=get_dewey_decimal_subject_division(callnum2)]
-
-dat[is.na(dewey_division) & !is.na(dewey_class)]
-dat[!is.na(dewey_division)] %>% dt_counts_and_percents("dewey_division", .N)
-
-dat[, dewey_section:=get_dewey_decimal_subject_section(callnum2)]
-
-dat[is.na(dewey_section) & !is.na(dewey_class)]
-dat[!is.na(dewey_section)] %>% dt_counts_and_percents("dewey_section", .N)
-
-## END DEWEY
-
-
-## LC
-
-just_valid_lccalls <- function(x){
-  x[is_valid_lc_call(x)]
-}
-
-dat[!is.na(lccall) & str_detect(lccall, ";"),
-    lccall:=split_map_filter_reduce(lccall, mapfun=just_valid_lccalls,
-                                    filterfun=remove_duplicates_and_nas, cl=7)]
-
-dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
-
-dat[, .(lccall, lc_subject_class)]
-dat[!is.na(lccall) & is.na(lc_subject_class), .(lccall, lc_subject_class)]
-dat[!is.na(lccall), .N, is.na(lc_subject_class)]
-dat[!is.na(lccall), .N, is.na(lc_subject_class)]
-#     is.na       N
-#    <lgcl>   <int>
-# 1:  FALSE 8295402
-# 2:   TRUE  319719
-
-dat[, lccall:=str_replace(str_replace(lccall, "]", ""), "\\[", "")]
-dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
-dat[!is.na(lccall), .N, is.na(lc_subject_class)]
-#     is.na       N
-#    <lgcl>   <int>
-# 1:  FALSE 8296239
-# 2:   TRUE  318882
-
-
-
-dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
-dat[!is.na(lccall), .N, is.na(lc_subject_class)]
-#  is.na       N
-# <lgcl>   <int>
-# 1:  FALSE 8306750
-# 2:   TRUE  307931
-
-dat %>% dt_counts_and_percents("lc_subject_class")
-
-
+### CHANGE EVERY YEAR
+CURRENT_YEAR <- 2021
+dat[!is.na(pub_year) & pub_year > CURRENT_YEAR, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000 & pub_year > 201, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000, pub_year:=as.integer(10*pub_year)]
 
 
 
 # --------------------------------------------------------------- #
 
+
+# interlude to remove "_dp" from names
+setnames(dat, "callnum_dp", "item_callnum")
+
+dat %>% names %>% str_replace("_dp$", "") -> withoutdp
+setnames(dat, withoutdp)
+
+
+# --------------------------------------------------------------- #
 
 #########################
 ####  BRANCH OR RESEARCH
@@ -214,17 +135,55 @@ dat[, paste(unique(branch_or_research), sep=";", collapse=";"), bibid] -> tmp
 
 tmp[, is_mixed_bib:=str_detect(V1, ";")]
 dt_del_cols(tmp, "V1")
+setkey(tmp, "bibid")
 
 setkey(dat, "bibid")
 dat %>% merge(tmp, all.x=TRUE) -> dat
 
 
+# --------------------------------------------------------------- #
+
+##########################
+####  CALL NUMBER SUBJECTS
+
+## BEGIN DEWEY
+
+dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
+# 2021-04: 99.77%
+
+dat[, callnum2:=str_replace(callnum2, "[^\\d.].*$", "")]
+dat[!str_detect(callnum2, "^\\d"), callnum2:=NA]
+
+dat[!is.na(callnum2), .(callnum2)]
+dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
+# 2021-04: 30% :(
+
+
+dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
+dat[, dewey_division:=get_dewey_decimal_subject_division(callnum2)]
+dat[, dewey_section:=get_dewey_decimal_subject_section(callnum2)]
+
+## END DEWEY
+
+
+## BEGIN LC
+
+just_valid_lccalls <- function(x){ x[is_valid_lc_call(x)] }
+
+# just 2 minutes
+dat[!is.na(lccall) & str_detect(lccall, ";"),
+    lccall:=split_map_filter_reduce(lccall, mapfun=just_valid_lccalls,
+                                    filterfun=remove_duplicates_and_nas, cl=7)]
+
+dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
+dat[, lc_subject_subclass:=get_lc_call_subject_classification(lccall, subclassification=TRUE)]
+
+dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_class")
+
+
+# --------------------------------------------------------------- #
 
 
 
-### @@@ clean _dp names
-
-### @@@ !!!! CHANGE README (also for step2)
-
-
+dat %>% fwrite("./target/big-healed-sierra-comb-just-two-years.dat.gz")
 
