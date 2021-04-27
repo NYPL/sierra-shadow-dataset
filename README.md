@@ -498,11 +498,11 @@ AND LOOK OVER COLUMNS!!
 
     Subject name from the 0s place of the Dewey Decimal Call number
 
-  - `lc_subject_classification` (RESEARCH TARGET ONLY)
+  - `lc_subject_class` (RESEARCH TARGET ONLY)
 
     The LC subject classification from first letter of LC call number
 
-  - `lc_subject_subclassification` (RESEARCH TARGET ONLY)
+  - `lc_subject_subclass` (RESEARCH TARGET ONLY)
 
     The LC subject _sub_ classification from all letters of LC call number
 
