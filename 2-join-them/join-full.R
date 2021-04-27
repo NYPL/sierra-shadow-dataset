@@ -6,6 +6,9 @@ require(colorout)
 library(data.table)
 library(stringr)
 library(magrittr)
+library(libbib)
+
+options(datatable.na.strings="")
 
 
 # on a machine with data.table using 10 threads (4.6 GHz)
@@ -103,8 +106,7 @@ comb[, .N, itype_dp<=100]
 # but I guess it was only 6,791
 
 
-  system.time(
-comb %>% saveRDS("./big-sierra-comb.datatable")
-  )
-# 5.1 minutes
+
+comb %>% fwrite("./target/big-sierra-comb.dat.gz")
+# 30 seconds to `saveRDS`'s 5 minutes
 
