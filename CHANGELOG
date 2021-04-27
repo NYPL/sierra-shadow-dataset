@@ -1,4 +1,13 @@
 
+2021-04-08-revision-1
+  - leaned more on libbib
+    - e.g. used `split_map_filter_reduce`
+    - the utilities
+  - restructured steps now that 3 and 4 are combined
+  - directly outputs gziped tsv from fwrite instead of saveRDS
+  - directly reads the gzipped exports from python
+  - other folder structure changes that make more sense
+
 2021-04-08
   - added LC subject classifications/subclassifications to research target
     (in step 5)

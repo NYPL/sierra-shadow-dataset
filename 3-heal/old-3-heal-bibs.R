@@ -1,22 +1,34 @@
 #!/usr/local/bin//Rscript --vanilla
 
 
-# options(warn=1)
-options(echo=TRUE)
+# ------------------------------ #
+rm(list=ls())
 
-require(colorout)
+options(echo=TRUE)
+options(width = 80)
+options(warn=2)
+options(scipen=10)
+options(datatable.prettyprint.char=50)
+options(datatable.print.class=TRUE)
+options(datatable.print.keys=TRUE)
+options(datatable.fwrite.sep='\t')
+options(datatable.na.strings="")
+
+args <- commandArgs(trailingOnly=TRUE)
+
+library(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
+library(libbib)       # version 1.5.3
 library(pbapply)
 
-library(libbib)   # version 1.0 on CRAN
-
-source("../utils/utils.R")
+# ------------------------------ #
 
 
 
-dat <- readRDS("../2-join-them/big-sierra-comb.datatable")
+
+dat <- fread("../2-join-them/target/big-sierra-comb.dat.gz")
 
 dat[,.N]
 # 2021-04-08:	15,715,406

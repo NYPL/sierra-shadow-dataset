@@ -72,15 +72,18 @@ same MARC field interrogations and manipulations.
 It lives on a shared NYPL drive named `NYPL Shadow Dataset`.
 There you'll find...
 
-  - `sierra-all-healed-joined.datatable` a serialized R datatable object
-    containing both research and branch items.
+  - `sierra-all-healed-joined.dat.gz`
+    a gzipped tab-delimited data file containing both research
+    and branch items.
 
-  - `sierra-branch-healed-joined.datatable` a serialized R datatable object
-    containing both just branch items as determined by the ITYPE. This
-    is _substantially_ smaller than the full or research counterpart.
+  - `sierra-branch-healed-joined.dat.gz`
+    a gzipped tab-delimited data file containing just branch items
+    as determined by the ITYPE. This is _substantially_ smaller than the
+    full or research counterpart.
 
-  - `sierra-research-healed-joined.datatable` a serialized R datatable object
-    containing both just research items as determined by the ITYPE
+  - `sierra-research-healed-joined.dat.gz`
+    a gzipped tab-delimited data file containing just research items
+    as determined by the ITYPE.
 
   - `sierra-bib-dump.sql.gz` a gzipped copy of the postgres BIB database
     dump straight from the source
@@ -90,23 +93,37 @@ There you'll find...
 
   - a copy of the latest historical circ information used in the process
     for joining with with the dumps to include circ counts from previous
-    years. At time of writing, this is a 4 column (serialized) dataset
-    including `bibid`, `itemid`, `fy17_checkouts`, and `fy18_checkouts`.
-    When joined with the lasted aggregation, for example, this will
-    yield FY17-to-FY20 circ information for every NYPL item
+    years. At time of writing, this is a 5 column gzipped tab-delimited
+    dataset including `bibid`, `itemid`, `fy17_checkouts`, `fy18_checkouts`,
+    and `fy19_checkouts`. When joined with the lasted aggregation, for
+    example, this will yield FY17-to-FY20 circ information for every
+    NYPL item
 
 All of the files above include the date of the database(s) export before
 the file extension. As of time of writing this is __2021-04-08__.
 
-The serialized (and heavily compressed) `.datatable` files can be read
-from R using the following incantation in R:
+The files may also have a revision number if a change (improvement) to
+the data files was made but not using new data exported from shadow Sierra.
+
+The gzipped tab-delimited data files can be read directly into R
+using the following incantation.
 
 ```
-whatever <- readRDS("./thefile.datatable")
+whatever <- data.table::fread("./thefile.dat.gz")
 ```
 
-Other formats may be included if other people find that it would be useful.
-(Heavily) compressed CSV/TSV, feather, sqlite file, whatever.
+It can also be un-gzipped and read directly with `read.csv`, `fread`,
+`read_tsv` or any other program that can read (huge) TSVs.
+
+_Note: because some of the MARC control fields in the data files have_
+_leading spaces, it's a good idea to read them not stripping leading_
+_of trailing whitespace (for example, if you want to use the oh08_
+_[Marc field 008] field_
+You can do that with `fread` like so...
+```
+whatever <- data.table::fread("./thefile.dat.gz", strip.white=FALSE)
+```
+
 
 ## Development stack
 
@@ -141,6 +158,7 @@ upstream repository.
 
 Step 1
 -----
+
 This first step consumes the sqldumps and does most of the teasing apart
 of the most relevant information.
 
@@ -159,21 +177,50 @@ $ # and similar for the item dump
 There is a crude progress indicator for each script.
 
 At the end, two files (`exported-bibs-raw-from-python.txt` and
-`exported-items-raw-from-python.txt`) are spit out and ready to be consumed
-by the process in the next stage.
+`exported-items-raw-from-python.txt`) are spit out. They are both gzipped
+and, then, ready to be consumed by the process in the next stage.
+
 
 
 Step 2
 -----
+
 This consumes the two exports from the previous step, does a little bit
-of filtering, and joins the two data tables on `itemid`. This is the
-step that requires a special memory-optimized EC2 instance to run.
+of filtering, and joins the two data tables on `itemid`.
+This step may (probably) requires a special memory-optimized EC2 instance
+to run unless you have 64GB of RAM.
 
-The output is `bib-sierra-comb.datatable`.
+The output is `./2-join-them/target/bib-sierra-comb.dat.gz`
 
 
-Step 3 (and 4)
+
+Step 3
 -----
+
+Step 3 concerns itself with data remediates... and, gee, is there a lot
+to remediate. The columns modified here are
+
+  - `isbn`
+    This
+
+  - `issn`
+    This
+
+  - `lccn`
+    This
+
+  - `oclc`
+    This
+
+  - `date`
+    This
+
+Adds subjects and labels items and "research" or "branch"
+
+This step, too, requires a powerful EC2 instance with a lot of cores unless
+you have an unreasonably powerful computer.
+
+
 In step 3, the ISBNs (converted to ISBN13s) and ISSN are remediated and
 verified. The process is parallelized (using the `pbapply` package) but
 still takes over 30 min to run using 6 threads.
@@ -185,7 +232,7 @@ by semicolons.
 
 `big-healed-sierra-comb.datatable` is ready for the final stage.
 
-Step 5
+Step 4
 -----
 This final stage joins previous years' circulation data into the mix. At
 time of writing, FY17, FY18 and FY19 circulation numbers are thrown in

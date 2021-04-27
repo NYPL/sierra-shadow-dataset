@@ -1,31 +1,47 @@
-#!/usr/local/bin/Rscript --vanilla
+#!/usr/local/bin//Rscript --vanilla
+
+
+# ------------------------------ #
+rm(list=ls())
 
 options(echo=TRUE)
+options(width = 80)
+options(warn=2)
+options(scipen=10)
+options(datatable.prettyprint.char=50)
+options(datatable.print.class=TRUE)
+options(datatable.print.keys=TRUE)
+options(datatable.fwrite.sep='\t')
+options(datatable.na.strings="")
 
-require(colorout)
+args <- commandArgs(trailingOnly=TRUE)
+
+library(colorout)
 library(data.table)
-library(stringr)
 library(magrittr)
+library(stringr)
 library(libbib)
 
-options(datatable.na.strings="")
+# ------------------------------ #
+
+
 
 
 # on a machine with data.table using 10 threads (4.6 GHz)
 #   and 64 GB RAM available)
 
-# 3.5 minutes
+# 4.4 minutes
   system.time(
-bibs <- fread("../1-export-from-python/bibs/exported-bibs-raw-from-python.txt",
-              quote="",
+bibs <- fread("../1-export-from-python/bibs/exported-bibs-raw-from-python.txt.gz",
+              quote="", strip.white=FALSE,
               na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t")
   )
 
 # 1 minute
   system.time(
-items <- fread("../1-export-from-python/items/exported-items-raw-from-python.txt",
+items <- fread("../1-export-from-python/items/exported-items-raw-from-python.txt.gz",
                na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
-               colClasses=c("itemid"="character"))
+               strip.white=FALSE, colClasses=c("itemid"="character"))
   )
 
 # using 29 GB of RAM now
@@ -104,7 +120,6 @@ comb[, .N, itype_dp<=100]
 # 10,895,556		(2020-07)
 
 # but I guess it was only 6,791
-
 
 
 comb %>% fwrite("./target/big-sierra-comb.dat.gz")
