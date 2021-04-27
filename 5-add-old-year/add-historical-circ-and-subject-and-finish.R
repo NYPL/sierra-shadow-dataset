@@ -13,9 +13,8 @@ library(data.table)
 library(magrittr)
 library(stringr)
 
-library(libbib)         # version 1.0 (on CRAN)
+library(libbib)         # version 1.3
 
-source("../utils/utils.R")
 # ------------------------------ #
 
 
@@ -98,7 +97,7 @@ comb[itype>100, branch_or_research:="branch"]
 comb[, paste(unique(branch_or_research), sep=";", collapse=";"), bibid] -> tmp
 
 tmp[, is_mixed_bib:=str_detect(V1, ";")]
-delcols(tmp, "V1")
+dt_del_cols(tmp, "V1")
 
 setkey(comb, "bibid")
 comb %>% merge(tmp, all.x=TRUE) -> comb
@@ -151,6 +150,94 @@ comb %>% merge(agg, all.x=TRUE) -> big
 rm(comb)
 rm(agg)
 gc()
+
+
+#### SUBJECT
+
+## dewey
+
+big[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
+## 2021-04
+big[,.N, is.na(dewey_class)]
+#     is.na        N
+#    <lgcl>    <int>
+#    1:   TRUE 14208875
+#    2:  FALSE  1,506,531
+big[!is.na(dewey_class)] %>% dt_counts_and_percents("dewey_class")
+#                                     dewey_class     val percent
+#                                          <char>   <int>   <num>
+#  1: Social sciences, sociology and anthropology  316626   21.02
+#  2:                                  Technology  272622   18.10
+#  3:                                     History  222334   14.76
+#  4:                                     Science  184633   12.26
+#  5:                                        Arts  175958   11.68
+#  6:    Literature (Belles-lettres) and rhetoric  123444    8.19
+#  7:                   Philosophy and psychology   65595    4.35
+#  8:                                    Language   51004    3.39
+#  9:     Computer science, knowledge and systems   50257    3.34
+# 10:                                    Religion   44058    2.92
+# 11:                                       TOTAL 1506531  100.00
+
+big[, dewey_division:=get_dewey_decimal_subject_division(callnum2)]
+
+big[is.na(dewey_division) & !is.na(dewey_class)]
+big[!is.na(dewey_division)] %>% dt_counts_and_percents("dewey_division", .N)
+
+big[, dewey_section:=get_dewey_decimal_subject_section(callnum2)]
+
+big[is.na(dewey_section) & !is.na(dewey_class)]
+big[!is.na(dewey_section)] %>% dt_counts_and_percents("dewey_section", .N)
+
+## end dewey
+
+## LC
+
+big[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
+
+big[, .(lccall, lc_subject_class)]
+big[!is.na(lccall) & is.na(lc_subject_class), .(lccall, lc_subject_class)]
+big[!is.na(lccall), .N, is.na(lc_subject_class)]
+big[!is.na(lccall), .N, is.na(lc_subject_class)]
+#     is.na       N
+#    <lgcl>   <int>
+# 1:  FALSE 8295402
+# 2:   TRUE  319719
+
+big[, lccall:=str_replace(str_replace(lccall, "]", ""), "\\[", "")]
+big[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
+big[!is.na(lccall), .N, is.na(lc_subject_class)]
+#     is.na       N
+#    <lgcl>   <int>
+# 1:  FALSE 8296239
+# 2:   TRUE  318882
+
+
+
+just_valid_lccalls <- function(x){
+  x[is_valid_lc_call(x)]
+}
+
+# experiment
+big[!is.na(lccall) & str_detect(lccall, ";"),
+    lccall:=split_map_filter_reduce(lccall, mapfun=just_valid_lccalls,
+                                    filterfun=remove_duplicates_and_nas, cl=7)]
+big[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
+big[!is.na(lccall), .N, is.na(lc_subject_class)]
+#  is.na       N
+# <lgcl>   <int>
+# 1:  FALSE 8306750
+# 2:   TRUE  307931
+
+big %>% dt_counts_and_percents("lc_subject_class")
+
+
+
+big[str_detect(lccall, ";"), .(lccall)]
+
+
+#### END SUBJECT
+
+
 
 big[branch_or_research=="branch"] -> branch
 branch %>% saveRDS("../target/sierra-branch-healed-joined.datatable")
