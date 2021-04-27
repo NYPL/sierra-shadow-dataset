@@ -201,13 +201,9 @@ Step 3 concerns itself with data remediates... and, gee, is there a lot
 to remediate. The columns modified here are
 
   - `isbn`
-
   - `issn`
-
   - `lccn`
-
   - `oclc`
-
   - `date`
 
 If there are multiple control numbers for any of these (ISBN, ISSN, OCLC,
@@ -456,6 +452,8 @@ AND LOOK OVER COLUMNS!!
 
   - `fy20_checkouts`
 
+  - `fy21_checkouts`
+
   - `bib_fy17_checkouts`
 
     Sum of FY17 checkouts for all items under bibid (very useful)
@@ -472,6 +470,10 @@ AND LOOK OVER COLUMNS!!
 
     Sum of FY20 checkouts for all items under bibid (very useful)
 
+  - `bib_fy21_checkouts`
+
+    Sum of FY21 checkouts for all items under bibid (very useful)
+
   - `bib_total_checkouts`
 
     Sum of total checkouts for all items under bibid (very useful)
@@ -483,6 +485,18 @@ AND LOOK OVER COLUMNS!!
   - `bib_total_circ`
 
     Sum of total checkouts __and__ renewals for all items under bibid (very useful)
+
+  - `dewey_class` (BRANCH TARGET ONLY)
+
+    Subject name from the 100s place of the Dewey Decimal Call number
+
+  - `dewey_division` (BRANCH TARGET ONLY)
+
+    Subject name from the 10s place of the Dewey Decimal Call number
+
+  - `dewey_section` (BRANCH TARGET ONLY)
+
+    Subject name from the 0s place of the Dewey Decimal Call number
 
   - `lc_subject_classification` (RESEARCH TARGET ONLY)
 
