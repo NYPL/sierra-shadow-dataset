@@ -131,15 +131,7 @@ setnames(dat, withoutdp)
 dat[itype<=100, branch_or_research:="research"]
 dat[itype>100, branch_or_research:="branch"]
 
-dat[, paste(unique(branch_or_research), sep=";", collapse=";"), bibid] -> tmp
-
-tmp[, is_mixed_bib:=str_detect(V1, ";")]
-dt_del_cols(tmp, "V1")
-setkey(tmp, "bibid")
-
-setkey(dat, "bibid")
-dat %>% merge(tmp, all.x=TRUE) -> dat
-
+dat[, is_mixed_bib:=uniqueN(branch_or_research)>1, bibid]
 
 # --------------------------------------------------------------- #
 
