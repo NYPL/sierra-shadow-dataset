@@ -244,10 +244,10 @@ the circulation data for the title. The latter numbers are, of course,
 identical for each item under the title. This is especially useful for
 serials and branch titles.
 
-
-MENTION FINAL TARGET
-
-AND LOOK OVER COLUMNS!!
+The (final) output files are:
+  - `./target/sierra-all-healed-joined-YYYY-MM-DD.dat.gz`
+  - `./target/sierra-research-healed-joined-YYYY-MM-DD.dat.gz`
+  - `./target/sierra-branch-healed-joined-YYYY-MM-DD.dat.gz`
 
 
 ## Columns and data dictionary

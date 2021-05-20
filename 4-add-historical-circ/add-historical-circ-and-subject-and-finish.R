@@ -5,7 +5,7 @@
 rm(list=ls())
 
 options(echo=TRUE)
-options(width = 80)
+options(width=80)
 options(warn=2)
 options(scipen=10)
 options(datatable.prettyprint.char=50)
@@ -20,13 +20,18 @@ library(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
-library(libbib)      # v1.5.3
+library(libbib)     # >= v1.6.2
 
 # ------------------------------ #
 
 
-dat <- fread("../3-heal/target/big-healed-sierra-comb-just-two-years.dat.gz",
-             strip.white=FALSE)
+dat <- fread_plus_date("../3-heal/target/big-healed-sierra-comb-just-two-years.dat.gz",
+                       strip.white=FALSE)
+expdate <- attr(dat, "lb.date")
+
+# ensures that years aren't messed up
+if(as.Date(expdate) > as.Date("2021-06-30"))
+  stop("new year. make sure you update this script")
 
 old <- fread("../data/historical-circ/historical-circ-fy17-19.dat.gz")
 
@@ -91,6 +96,9 @@ setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable",
                     "suppressed", "itype", "branch_or_research",
                     "is_mixed_bib"))
 comb %>% names
+#### CHANGE EVERY YEAR ####
+#### CHANGE EVERY YEAR ####
+#### CHANGE EVERY YEAR ####
 comb %>% names %>% length     # 66
 
 setkey(comb, "bibid")
@@ -123,6 +131,9 @@ gc()
 # --------------------------------------------------------------- #
 
 ##### FINAL NAMES
+#### CHANGE EVERY YEAR ####
+#### CHANGE EVERY YEAR ####
+#### CHANGE EVERY YEAR ####
 big %>% names
 finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "itype", "branch_or_research", "is_mixed_bib", "leader",
@@ -153,9 +164,11 @@ setcolorder(big, finalorder)
 
 
 big[branch_or_research=="branch"] -> branch
-branch %>% fwrite("../target/sierra-branch-healed-joined.dat.gz")
+set_lb_date(branch, expdate)
+branch %>% fwrite_plus_date("../target/sierra-branch-healed-joined.dat.gz")
 
-big %>% fwrite("../target/sierra-all-healed-joined.dat.gz")
+set_lb_date(big, expdate)
+big %>% fwrite_plus_date("../target/sierra-all-healed-joined.dat.gz")
 
 
 
@@ -200,11 +213,12 @@ intersect(names(agg), names(research)) -> tmp
 tmp[tmp!="bibid"] -> tmp
 dt_del_cols(research, tmp)
 
-research %>% merge(agg, all.x=TRUE) -> big
+research %>% merge(agg, all.x=TRUE) -> research
 
 research[bibid=="12453190", ]
 
 
-big %>% fwrite("../target/sierra-research-healed-joined.dat.gz")
+set_lb_date(research, expdate)
+research %>% fwrite_plus_date("../target/sierra-research-healed-joined.dat.gz")
 
 

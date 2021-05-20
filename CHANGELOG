@@ -4,6 +4,9 @@
   - ./2-join-them/join-full.R uses fread/fwrite_plus_date
   - added assertr row count checks
   - ./3* uses fread/fwrite_plus_date
+  - ./4* has a check to make sure the year hasn't changed without updating
+    script
+  - ./4* uses fread/fwrite_plus_date
 
 2021-04-08-revision-1
   - leaned more on libbib
