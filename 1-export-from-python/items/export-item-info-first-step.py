@@ -17,7 +17,7 @@ SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH = 0
 
 LINES_EXPORTED = 0
 
-OUTFILE = "./exported-items-raw-from-python-2021-04-08.txt"
+OUTFILE = "./exported-items-raw-from-python.dat"
 ERRFILE = "./item-error-log.txt"
 ofh = open(OUTFILE, "w")
 efh = open(ERRFILE, "w")
@@ -158,8 +158,8 @@ for currentline in fileinput.input():
         print("{} of {}...\t\t{}%".format(COUNTER, TOTAL_LINES, perc))
 
     # NO
-    # if COUNTER > 1000000:
-    #     break
+    if COUNTER > 10000:
+        break
 
     raw_fields = currentline.split("\t")
     if len(raw_fields) != 15:

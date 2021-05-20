@@ -1,3 +1,6 @@
+2021-04-08-revision-2
+  - ./1-export-from-python/do-all.sh now does bibs and items automatically
+    and uses ISO 8601 dates in the output filenames
 
 2021-04-08-revision-1
   - leaned more on libbib

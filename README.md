@@ -176,9 +176,16 @@ $ # and similar for the item dump
 
 There is a crude progress indicator for each script.
 
-At the end, two files (`exported-bibs-raw-from-python.txt` and
-`exported-items-raw-from-python.txt`) are spit out. They are both gzipped
-and, then, ready to be consumed by the process in the next stage.
+Instead of piping them directly, you should use the script
+`./1-export-from-python/do-all.sh`.
+It will automatically run both the bibs and the items, compress them,
+and put the right ISO 8601 date in the filenames
+
+At the end, two files (`exported-bibs-raw-from-python-YYYY-MM-DD.dat.gz` and
+`exported-items-raw-from-python-YYYY-MM-DD.dat.gz`) are spit out, where
+`YYYY-MM-DD` is the ISO 8601 date of the sql export.
+
+Now they're ready to be consumed by the process in the next stage.
 
 
 

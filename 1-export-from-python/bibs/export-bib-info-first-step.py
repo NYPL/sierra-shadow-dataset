@@ -238,7 +238,7 @@ def get_oclc_by_any_means_necessary(var_json):
 
 JSONERRORS = 0
 
-OUTFH = open("exported-bibs-raw-from-python.txt", "w")
+OUTFH = open("exported-bibs-raw-from-python.dat", "w")
 
 OUTFH.write("{}\n".format('\t'.join(HEADER)))
 
@@ -248,8 +248,10 @@ for line in fileinput.input():
     index = index + 1
     good = True
     line = line.strip()
-    # if index < 103:
-    #     continue
+
+    if index > 10000:
+        break
+
     if index % 50000 == 0:
         sys.stderr.write("ON {} of {}..... {}%\n".format(
             index, NUMBEROFLINES, round((index/NUMBEROFLINES)*100, 2)))
