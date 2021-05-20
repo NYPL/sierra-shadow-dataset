@@ -5,7 +5,7 @@
 rm(list=ls())
 
 options(echo=TRUE)
-options(width = 80)
+options(width=80)
 options(warn=2)
 options(scipen=10)
 options(datatable.prettyprint.char=50)
@@ -20,7 +20,7 @@ library(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
-library(libbib)       # version 1.5.3
+library(libbib)    # >= v1.6.2
 library(pbapply)
 
 # ------------------------------ #
@@ -28,8 +28,9 @@ library(pbapply)
 
 
 # around 3 minutes
-dat <- fread("../2-join-them/target/big-sierra-comb.dat.gz",
-             strip.white=FALSE)
+dat <- fread_plus_date("../2-join-them/target/big-sierra-comb.dat.gz",
+                       strip.white=FALSE)
+expdate <- attr(dat, "lb.date")
 
 dat[bibid=="20869063"] # :)
 
@@ -45,7 +46,7 @@ dat[!is.na(isbn),
                                   },
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
-                                  cl=9)]
+                                  cl=7)]
 #    39 minutes
 # or 24 minutes
 
@@ -176,6 +177,6 @@ dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_class
 # --------------------------------------------------------------- #
 
 
-
-dat %>% fwrite("./target/big-healed-sierra-comb-just-two-years.dat.gz")
+set_lb_date(dat, expdate)
+dat %>% fwrite_plus_date("./target/big-healed-sierra-comb-just-two-years.dat.gz")
 

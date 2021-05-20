@@ -119,7 +119,6 @@ comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
 
 
 
-comb <- data.table(a=c(1, 2), b=c(3, 4))
 set_lb_date(comb, expdate)
 comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz")
 

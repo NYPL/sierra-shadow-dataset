@@ -226,7 +226,7 @@ you have an unreasonably powerful computer.
 
 It'll take hours no matter what
 
-The output, `./3-heal/target/big-healed-sierra-comb-just-two-years.dat.gz`
+The output, `./3-heal/target/big-healed-sierra-comb-just-two-years-YYYY-MM-DD.dat.gz`
 is now ready for the final stage.
 
 

@@ -2,6 +2,8 @@
   - ./1-export-from-python/do-all.sh now does bibs and items automatically
     and uses ISO 8601 dates in the output filenames
   - ./2-join-them/join-full.R uses fread/fwrite_plus_date
+  - added assertr row count checks
+  - ./3* uses fread/fwrite_plus_date
 
 2021-04-08-revision-1
   - leaned more on libbib
