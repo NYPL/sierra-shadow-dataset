@@ -5,7 +5,7 @@
 rm(list=ls())
 
 options(echo=TRUE)
-options(width = 80)
+options(width=80)
 options(warn=2)
 options(scipen=10)
 options(datatable.prettyprint.char=50)
@@ -20,10 +20,10 @@ library(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
-library(libbib)
+library(libbib)   # >= v1.6.2
+library(assertr)
 
 # ------------------------------ #
-
 
 
 
@@ -32,30 +32,34 @@ library(libbib)
 
 # 4.4 minutes
   system.time(
-bibs <- fread("../1-export-from-python/bibs/exported-bibs-raw-from-python.txt.gz",
-              quote="", strip.white=FALSE,
-              na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t")
+bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
+                        quote="", strip.white=FALSE,
+                        na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t")
   )
+expdate <- attr(bibs, "lb.date")
+
 
 # 1 minute
   system.time(
-items <- fread("../1-export-from-python/items/exported-items-raw-from-python.txt.gz",
-               na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
-               strip.white=FALSE, colClasses=c("itemid"="character"))
+items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
+                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
+                         strip.white=FALSE, colClasses=c("itemid"="character"))
   )
 
 # using 29 GB of RAM now
 
 bibs[, .N]
-# 15,996,119 (2021-04)
-# 15,770,812 (2020-07)
-# 15,525,387 (2019-12)
-# 15,364,558 (2019-10)
+# bibs %>% verify(nrow(.) >= 15364558, success_fun=success_report) # 2019-10
+# bibs %>% verify(nrow(.) >= 15525387, success_fun=success_report) # 2019-12
+# bibs %>% verify(nrow(.) >= 15770812, success_fun=success_report) # 2020-07
+bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
+
 items[, .N]
-# 24,033,693 (2021-04)   [uh oh!]
-# 24,534,875 (2020-07)
-# 24,393,263 (2019-12)
-# 24,349,304 (2019-10)
+# items %>% verify(nrow(.) >= 24349304, success_fun=success_report) # 2019-10
+# items %>% verify(nrow(.) >= 24393263, success_fun=success_report) # 2019-12
+# items %>% verify(nrow(.) >= 24534875, success_fun=success_report) # 2020-07
+items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
+
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
 
@@ -82,12 +86,11 @@ items[, initemtable:=TRUE]
 bibs %>% merge(items, all=TRUE) -> comb
   )
 
-# rm(bibs)
-# gc()
-# rm(items)
-# gc()
+rm(bibs)
+gc()
+rm(items)
+gc()
 
-# now using 41 GB of memory
 
 comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
 setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable"))
@@ -111,17 +114,12 @@ comb <- comb[!is.na(itype_dp),]
 # using 49 GBs of memory
 
 comb[, .N]
-# 15,715,406    (2021-04)
-# 16,243,897		(2020-07)
+# comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
+comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
 
 
-comb[, .N, itype_dp<=100]
-# 10,888,765    (2021-04)   [I guess we lost research items, too?]
-# 10,895,556		(2020-07)
 
-# but I guess it was only 6,791
-
-
-comb %>% fwrite("./target/big-sierra-comb.dat.gz")
-# 30 seconds to `saveRDS`'s 5 minutes
+comb <- data.table(a=c(1, 2), b=c(3, 4))
+set_lb_date(comb, expdate)
+comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz")
 

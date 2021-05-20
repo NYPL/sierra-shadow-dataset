@@ -197,7 +197,8 @@ of filtering, and joins the two data tables on `itemid`.
 This step may (probably) requires a special memory-optimized EC2 instance
 to run unless you have 64GB of RAM.
 
-The output is `./2-join-them/target/bib-sierra-comb.dat.gz`
+The output is `./2-join-them/target/bib-sierra-comb-YYYY-MM-DD.dat.gz`
+where `YYYY-MM-DD` is the ISO 8601 date of the SQL export
 
 
 
