@@ -20,7 +20,7 @@ jA0ECQMKzWm6daz1mTj/0kgBi7wKoWwU9lAx5K1NAgFfPjreTDnfvmsXwY53M2/h
 took 3.1 hours
 User-mode: 353.90s      Kernel-mode: 646.33s    Wall: 11299.17s Perc: 8%
 It's 100 GBs.
-It took (wc -l) three minites to reveal it has 18,077,746 lines
+It took (wc -l) three minutes to reveal it has 18,077,746 lines
 
 now using pigz to compress it
 $ time pigz -k full-bib-dump.sql
@@ -42,5 +42,18 @@ User-mode: 969.32s      Kernel-mode: 50.40s     Wall: 183.03s       Perc: 557%
 4.3G    full-item-dump-2021-03-18.sql.gz
 
 
+--------------
+-- 2021-07-11
+ITEM
+8.5 hours to download (bad internet)
+
+wc -l took 2.5 minutes
+35,945,571 full-item-dump.sql
+
+pigz took 3 minutes
+85G -> 4.4G
+
+-- BIB
+18,195,994
 
 
