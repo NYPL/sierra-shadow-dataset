@@ -26,7 +26,15 @@ library(libbib)     # >= v1.6.2
 
 
 dat <- fread_plus_date("../3-heal/target/big-healed-sierra-comb-just-two-years.dat.gz",
-                       strip.white=FALSE)
+                       strip.white=FALSE,
+                       colClasses=c("suppressed"="factor", "source"="factor",
+                                    "biblevel"="factor", "mattype"="factor",
+                                    "langcode"="factor", "lang"="factor",
+                                    "countrycode"="factor", "country"="factor",
+                                    "nypltype"="factor", "hasmultbibids"="logical",
+                                    "status"="factor",
+                                    "item_location_code"="factor",
+                                    "item_location_str"="factor"))
 expdate <- attr(dat, "lb.date")
 
 # ensures that years aren't messed up
@@ -52,6 +60,7 @@ old[bibid=="12453190"]
 dat[bibid=="12453190", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
 
 # SICP
+old[bibid=="11366725"]
 dat[bibid=="11366725", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
 
 # probable and provable
@@ -99,7 +108,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 66
+comb %>% names %>% length     # 67
 
 setkey(comb, "bibid")
 
@@ -138,16 +147,16 @@ big %>% names
 finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "itype", "branch_or_research", "is_mixed_bib", "leader",
                 "oh08", "source", "pub_year", "catalogdate", "bib_location",
-                "biblevel", "mattype", "standard_nums", "isbn", "issn",
-                "lccn", "oclc", "other_standard", "callnum", "lccall",
-                "callnum2", "v852a", "langcode", "lang", "countrycode",
-                "country", "publisher", "nypltype", "description1",
-                "otherdetails", "dimensions", "description2", "description3",
-                "norm_author", "norm_title", "author", "title",
-                "num_copies_from_bib", "topical_terms", "gen_subdiv_term",
-                "form_subdiv_term", "index_term", "geo_terms", "hasmultbibids",
+                "biblevel", "mattype", "standard_nums", "isbn", "issn", "lccn",
+                "oclc", "other_standard", "callnum", "lccall", "callnum2",
+                "v852a", "langcode", "lang", "countrycode", "country",
+                "publisher", "nypltype", "description1", "otherdetails",
+                "dimensions", "description2", "description3", "norm_author",
+                "norm_title", "author", "title", "num_copies_from_bib",
+                "topical_terms", "gen_subdiv_term", "form_subdiv_term",
+                "index_term", "geo_terms", "hasmultbibids",
                 "item_location_code", "item_location_str", "barcode",
-                "item_callnum", "created_date", "total_checkouts",
+                "item_callnum", "created_date", "status", "total_checkouts",
                 "total_renewals", "total_circ", "fy17_checkouts",
                 "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
                 "fy21_checkouts", "bib_fy17_checkouts", "bib_fy18_checkouts",

@@ -1,3 +1,11 @@
+
+2021-07-11
+  - Reads some columns, explicitly, as factors.
+    Concomitant memory usage improvements
+  - Added item status (fixed field 88)
+  - Pulled as of 2021-07-11. Everything increased and looks good
+    "this years circ" is still FY21
+
 2021-04-08-revision-2
   - ./1-export-from-python/do-all.sh now does bibs and items automatically
     and uses ISO 8601 dates in the output filenames
