@@ -29,7 +29,16 @@ library(pbapply)
 
 # around 3 minutes
 dat <- fread_plus_date("../2-join-them/target/big-sierra-comb.dat.gz",
-                       strip.white=FALSE)
+                       strip.white=FALSE,
+                       colClasses=c("suppressed"="factor", "source"="factor",
+                                    "biblevel"="factor", "mattype"="factor",
+                                    "langcode"="factor", "lang"="factor",
+                                    "countrycode"="factor", "country"="factor",
+                                    "nypltype"="factor",
+                                    "hasmultbibids"="logical",
+                                    "status"="factor",
+                                    "item_location_code_dp"="factor",
+                                    "item_location_str_dp"="factor"))
 expdate <- attr(dat, "lb.date")
 
 dat[bibid=="20869063"] # :)
@@ -49,6 +58,7 @@ dat[!is.na(isbn),
                                   cl=7)]
 #    39 minutes
 # or 24 minutes
+# or 13 minutes
 
 # --------------------------------------------------------------- #
 
@@ -95,6 +105,7 @@ dat[!is.na(oclc),
                                   cl=7)]
 #    30 minutes
 # or 18 minutes
+# or 26 minutes
 
 
 # --------------------------------------------------------------- #
@@ -112,10 +123,7 @@ dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
 dat[!is.na(pub_year) & pub_year < 1000 & pub_year > 201, pub_year:=NA]
 dat[!is.na(pub_year) & pub_year < 1000, pub_year:=as.integer(10*pub_year)]
 
-
-
 # --------------------------------------------------------------- #
-
 
 # interlude to remove "_dp" from names
 setnames(dat, "callnum_dp", "item_callnum")
