@@ -249,8 +249,8 @@ for line in fileinput.input():
     good = True
     line = line.strip()
 
-    if index > 10000:
-        break
+    # if index > 10000:
+    #     break
 
     if index % 50000 == 0:
         sys.stderr.write("ON {} of {}..... {}%\n".format(

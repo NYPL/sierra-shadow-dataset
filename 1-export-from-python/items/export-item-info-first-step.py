@@ -109,6 +109,13 @@ def get_created_date(thefixedj):
     return tmp
 
 @cop_out
+def get_status(thefixedj):
+    tmp = thefixedj["88"]["display"]
+    if not tmp:
+        return "NA"
+    return tmp
+
+@cop_out
 def get_total_circ(thefixedj):
     total =  get_total_checkouts(thefixedj) + get_total_renewals(thefixedj)
     return "{}".format(total)
@@ -142,7 +149,7 @@ HEADER = '\t'.join(["itemid", "bibid_dp", "hasmultbibids",
                     "total_checkouts_dp", "total_renewals_dp",
                     "total_circ_dp", "last_year_circ_dp",
                     "this_year_circ_dp", "itype_dp",
-                    "created_date_dp"])
+                    "created_date_dp", "status"])
 
 
 
@@ -158,8 +165,8 @@ for currentline in fileinput.input():
         print("{} of {}...\t\t{}%".format(COUNTER, TOTAL_LINES, perc))
 
     # NO
-    if COUNTER > 10000:
-        break
+    # if COUNTER > 10000:
+    #     break
 
     raw_fields = currentline.split("\t")
     if len(raw_fields) != 15:
@@ -193,6 +200,7 @@ for currentline in fileinput.input():
     last_year_circ              = get_last_years_circ(fixed)
     this_year_circ              = get_year_to_date_circ(fixed)
     created_date                = get_created_date(fixed)
+    status                      = get_status(fixed)
     total_checkouts             = "{}".format(get_total_checkouts(fixed))
     total_renewals              = "{}".format(get_total_renewals(fixed))
     locationcode, locationstr   = cop_location(raw_fields[6])
@@ -201,7 +209,7 @@ for currentline in fileinput.input():
     outstr = '\t'.join([iid, bibids, hasmultbibids, locationcode,
                         locationstr, barcode, callnum, total_checkouts,
                         total_renewals, total_circ, last_year_circ,
-                        this_year_circ, itype, created_date])
+                        this_year_circ, itype, created_date, status])
 
     WRITE_IT(ofh, outstr)
     LINES_EXPORTED += 1
@@ -222,3 +230,4 @@ print("LINES EXPORTED:                              {}".format(LINES_EXPORTED))
 # 2019-12-??:       24,393,264
 # 2020-07-23:       24,534,876
 # 2021-03-18:       23,996,928    (uh oh)
+# 2021-07-11:       24,252,847
