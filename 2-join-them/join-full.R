@@ -34,8 +34,15 @@ library(assertr)
   system.time(
 bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
                         quote="", strip.white=FALSE,
-                        na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t")
+                        na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
+                        colClasses=c("suppressed"="factor", "source"="factor",
+                                     "biblevel"="factor", "mattype"="factor",
+                                     "langcode"="factor", "lang"="factor",
+                                     "countrycode"="factor", "country"="factor",
+                                     "nypltype"="factor"))
   )
+# 15.6GB 4.3 minutes (without factor specifications)
+# 15.1GB 4.1 minutes (with specifications)
 expdate <- attr(bibs, "lb.date")
 
 
@@ -43,7 +50,12 @@ expdate <- attr(bibs, "lb.date")
   system.time(
 items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
                          na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
-                         strip.white=FALSE, colClasses=c("itemid"="character"))
+                         strip.white=FALSE,
+                         colClasses=c("itemid"="character",
+                                      "hasmultbibids"="logical",
+                                      "status"="factor",
+                                      "item_location_code_dp"="factor",
+                                      "item_location_str_dp"="factor"))
   )
 
 # using 29 GB of RAM now
@@ -52,13 +64,15 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15364558, success_fun=success_report) # 2019-10
 # bibs %>% verify(nrow(.) >= 15525387, success_fun=success_report) # 2019-12
 # bibs %>% verify(nrow(.) >= 15770812, success_fun=success_report) # 2020-07
-bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
+# bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
+bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
 
 items[, .N]
 # items %>% verify(nrow(.) >= 24349304, success_fun=success_report) # 2019-10
 # items %>% verify(nrow(.) >= 24393263, success_fun=success_report) # 2019-12
 # items %>% verify(nrow(.) >= 24534875, success_fun=success_report) # 2020-07
-items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
+# items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
+items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -111,11 +125,13 @@ comb <- comb[inbibtable==TRUE]
 
 comb <- comb[!is.na(itype_dp),]
 
-# using 49 GBs of memory
+# using 49 GBs of memory (old)
+# using 35 GBs of memory
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
-comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
+# comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
+comb %>% verify(nrow(.) >= 15895579, success_fun=success_report) # 2021-07-11
 
 
 
