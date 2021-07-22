@@ -106,7 +106,11 @@ rm(items)
 gc()
 
 
-comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
+# this was a bad mistake
+# comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
+
+comb <- comb[!str_detect(item_location_str_dp, "OFFSITE . Request In Advance . [pc]ul")]
+
 setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable"))
 
 comb %>% names
@@ -131,7 +135,7 @@ comb <- comb[!is.na(itype_dp),]
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
 # comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
-comb %>% verify(nrow(.) >= 15895579, success_fun=success_report) # 2021-07-11
+comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
 
 
 

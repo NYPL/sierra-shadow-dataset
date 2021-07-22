@@ -41,7 +41,7 @@ dat <- fread_plus_date("../2-join-them/target/big-sierra-comb.dat.gz",
                                     "item_location_str_dp"="factor"))
 expdate <- attr(dat, "lb.date")
 
-dat[bibid=="20869063"] # :)
+dat[bibid==20869063] # :)
 
 
 # --------------------------------------------------------------- #

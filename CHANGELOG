@@ -1,4 +1,9 @@
 
+2021-07-11-revision-1
+  - Fixed a bug regarding LPA circulating as if they were CUL items
+    Recovered 227,268 items in sierra-all-healed-joined-... (all branch)
+    (15,895,579 -> 16,122,847)
+
 2021-07-11
   - Reads some columns, explicitly, as factors.
     Concomitant memory usage improvements
