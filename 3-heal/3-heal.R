@@ -151,6 +151,7 @@ dat[, is_mixed_bib:=uniqueN(branch_or_research)>1, bibid]
 
 dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-04: 99.77%
+# 2021-09: 99.75%
 
 dat[, callnum2:=str_replace(callnum2, "[^\\d.].*$", "")]
 dat[!str_detect(callnum2, "^\\d"), callnum2:=NA]
@@ -158,6 +159,7 @@ dat[!str_detect(callnum2, "^\\d"), callnum2:=NA]
 dat[!is.na(callnum2), .(callnum2)]
 dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-04: 30% :(
+# 2021-09: 32% :(
 
 
 dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
@@ -180,7 +182,9 @@ dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
 dat[, lc_subject_subclass:=get_lc_call_subject_classification(lccall, subclassification=TRUE)]
 
 dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_class")
-
+# 58% is NA
+dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_subclass")
+# 58% is NA
 
 # --------------------------------------------------------------- #
 

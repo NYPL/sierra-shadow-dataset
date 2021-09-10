@@ -30,7 +30,7 @@ library(assertr)
 # on a machine with data.table using 10 threads (4.6 GHz)
 #   and 64 GB RAM available)
 
-# 4.4 minutes
+# 5.5 minutes
   system.time(
 bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
                         quote="", strip.white=FALSE,
@@ -41,12 +41,10 @@ bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-pyt
                                      "countrycode"="factor", "country"="factor",
                                      "nypltype"="factor"))
   )
-# 15.6GB 4.3 minutes (without factor specifications)
-# 15.1GB 4.1 minutes (with specifications)
 expdate <- attr(bibs, "lb.date")
 
 
-# 1 minute
+# 1.5 minutes
   system.time(
 items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
                          na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
@@ -65,14 +63,17 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15525387, success_fun=success_report) # 2019-12
 # bibs %>% verify(nrow(.) >= 15770812, success_fun=success_report) # 2020-07
 # bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
-bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
+# bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
+bibs %>% verify(nrow(.) >= 195240937, success_fun=success_report) # 2021-09-09
+
 
 items[, .N]
 # items %>% verify(nrow(.) >= 24349304, success_fun=success_report) # 2019-10
 # items %>% verify(nrow(.) >= 24393263, success_fun=success_report) # 2019-12
 # items %>% verify(nrow(.) >= 24534875, success_fun=success_report) # 2020-07
 # items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
-items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
+# items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
+items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -95,18 +96,18 @@ items <- items[str_detect(bibid, "^\\d+$"), ]
 items[, initemtable:=TRUE]
 
 
-# about 2 minutes
+# about 2.5 minutes
   system.time(
 bibs %>% merge(items, all=TRUE) -> comb
   )
 
 rm(bibs)
-gc()
 rm(items)
 gc()
 
 
 # this was a bad mistake
+# I'm leaving it here so that IT NEVER HAPPENS AGAIN
 # comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
 
 comb <- comb[!str_detect(item_location_str_dp, "OFFSITE . Request In Advance . [pc]ul")]
@@ -130,12 +131,14 @@ comb <- comb[inbibtable==TRUE]
 comb <- comb[!is.na(itype_dp),]
 
 # using 49 GBs of memory (old)
-# using 35 GBs of memory
+# using 35 GBs of memory (old)
+# using 42 GBs of memory
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
 # comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
-comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
+# comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
+comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
 
 
 
