@@ -22,12 +22,13 @@ ERRFILE = "./item-error-log.txt"
 ofh = open(OUTFILE, "w")
 efh = open(ERRFILE, "w")
 
-TOTAL_LINES = 36444424
+TOTAL_LINES = 39824910
 
 # 2020-07-23:   35,327,625
 # 2021-03-18:   36,444,424    (+ 1,116,800)
+# 2021-09-09:   39,824,910    (+ 3,380,486)
 
-## QUESTION (2020-07): Why are there fewer item rows? old: 35617929
+
 
 def debug(linenum, line, reason):
     if DEBUG:
@@ -229,5 +230,7 @@ print("LINES EXPORTED:                              {}".format(LINES_EXPORTED))
 
 # 2019-12-??:       24,393,264
 # 2020-07-23:       24,534,876
-# 2021-03-18:       23,996,928    (uh oh)
+# 2021-03-18:       23,996,928  (uh oh)
 # 2021-07-11:       24,252,847
+# 2021-09-09:       27,303,801  69.5%   (+ 3,050,954)
+
