@@ -38,7 +38,7 @@ dat <- fread_plus_date("../3-heal/target/big-healed-sierra-comb-just-two-years.d
 expdate <- attr(dat, "lb.date")
 
 # ensures that years aren't messed up
-if(as.Date(expdate) > as.Date("2021-06-30"))
+if(as.Date(expdate) > as.Date("2022-06-30"))
   stop("new year. make sure you update this script")
 
 old <- fread("../data/historical-circ/historical-circ-fy17-19.dat.gz")
