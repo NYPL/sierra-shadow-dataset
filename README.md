@@ -100,7 +100,7 @@ There you'll find...
     NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2021-04-08__.
+the file extension. As of time of writing this is __2021-09-09__.
 
 The files may also have a revision number if a change (improvement) to
 the data files was made but not using new data exported from shadow Sierra.
@@ -462,6 +462,8 @@ The (final) output files are:
 
   - `fy21_checkouts`
 
+  - `fy22_checkouts`
+
   - `bib_fy17_checkouts`
 
     Sum of FY17 checkouts for all items under bibid (very useful)
@@ -481,6 +483,10 @@ The (final) output files are:
   - `bib_fy21_checkouts`
 
     Sum of FY21 checkouts for all items under bibid (very useful)
+
+  - `bib_fy22_checkouts`
+
+    Sum of FY22 checkouts for all items under bibid (very useful)
 
   - `bib_total_checkouts`
 
