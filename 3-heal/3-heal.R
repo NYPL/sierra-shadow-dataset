@@ -116,6 +116,8 @@ dat[!is.na(oclc),
 # getting the date from the 008 is a dead end
 
 ### CHANGE EVERY YEAR
+### CHANGE EVERY YEAR
+### CHANGE EVERY YEAR
 CURRENT_YEAR <- 2021
 dat[!is.na(pub_year) & pub_year > CURRENT_YEAR, pub_year:=NA]
 dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]

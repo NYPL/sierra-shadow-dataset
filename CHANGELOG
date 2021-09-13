@@ -1,4 +1,12 @@
 
+
+2021-09-09
+  - New fiscal year added. Now contains complete FY17-FY20 and year-to-date
+    FY21
+  - [Step 0 & 1] Export had over 3 million new items/bibs. Very likely
+    Harvard ReCAP items. Excluded, of course, from the final export
+
+
 2021-07-11-revision-1
   - Fixed a bug regarding LPA circulating as if they were CUL items
     Recovered 227,268 items in sierra-all-healed-joined-... (all branch)
