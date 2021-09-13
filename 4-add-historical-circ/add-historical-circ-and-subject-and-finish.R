@@ -41,7 +41,7 @@ expdate <- attr(dat, "lb.date")
 if(as.Date(expdate) > as.Date("2022-06-30"))
   stop("new year. make sure you update this script")
 
-old <- fread("../data/historical-circ/historical-circ-fy17-19.dat.gz")
+old <- fread("../data/historical-circ/historical-circ-fy17-fy20.dat.gz")
 
 dat %>% names
 
@@ -80,9 +80,8 @@ dat[bibid=="20869063", .(title, total_checkouts, total_renewals, last_year_circ,
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
-setnames(dat, "last_year_circ", "fy20_checkouts")
-setnames(dat, "this_year_circ", "fy21_checkouts")
-setnames(dat, "total_circ", "total_circ")
+setnames(dat, "last_year_circ", "fy21_checkouts")
+setnames(dat, "this_year_circ", "fy22_checkouts")
 
 setkey(old, "bibid", "itemid")
 setkey(dat, "bibid", "itemid")
@@ -108,7 +107,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 67
+comb %>% names %>% length     # 68
 
 setkey(comb, "bibid")
 
@@ -121,6 +120,7 @@ comb[, .(bib_fy17_checkouts         = sum(fy17_checkouts, na.rm=TRUE),
          bib_fy19_checkouts         = sum(fy19_checkouts, na.rm=TRUE),
          bib_fy20_checkouts         = sum(fy20_checkouts, na.rm=TRUE),
          bib_fy21_checkouts         = sum(fy21_checkouts, na.rm=TRUE),
+         bib_fy22_checkouts         = sum(fy22_checkouts, na.rm=TRUE),
          bib_total_checkouts        = sum(total_checkouts, na.rm=TRUE),
          bib_total_renewals         = sum(total_renewals, na.rm=TRUE),
          bib_total_circ             = sum(total_circ, na.rm=TRUE)),
@@ -159,9 +159,10 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "item_callnum", "created_date", "status", "total_checkouts",
                 "total_renewals", "total_circ", "fy17_checkouts",
                 "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
-                "fy21_checkouts", "bib_fy17_checkouts", "bib_fy18_checkouts",
-                "bib_fy19_checkouts", "bib_fy20_checkouts",
-                "bib_fy21_checkouts", "bib_total_checkouts",
+                "fy21_checkouts", "fy22_checkouts", "bib_fy17_checkouts",
+                "bib_fy18_checkouts", "bib_fy19_checkouts",
+                "bib_fy20_checkouts", "bib_fy21_checkouts",
+                "bib_fy22_checkouts", "bib_total_checkouts",
                 "bib_total_renewals", "bib_total_circ", "dewey_class",
                 "dewey_division", "dewey_section", "lc_subject_class",
                 "lc_subject_subclass")
@@ -188,6 +189,7 @@ gc()
 
 
 research[, .N]
+# 2021-09-09: 10,972,191
 # 2021-07-11: 10,945,918
 # 2021-04-08: 10,888,765
 # 2020-07-23: 10,895,556
@@ -210,6 +212,7 @@ research[, .(bib_fy17_checkouts           = sum(fy17_checkouts, na.rm=TRUE),
              bib_fy19_checkouts           = sum(fy19_checkouts, na.rm=TRUE),
              bib_fy20_checkouts           = sum(fy20_checkouts, na.rm=TRUE),
              bib_fy21_checkouts           = sum(fy21_checkouts, na.rm=TRUE),
+             bib_fy22_checkouts           = sum(fy22_checkouts, na.rm=TRUE),
              bib_total_checkouts          = sum(total_checkouts, na.rm=TRUE),
              bib_total_renewals           = sum(total_renewals, na.rm=TRUE),
              bib_total_circ               = sum(total_circ, na.rm=TRUE)),
