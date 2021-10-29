@@ -100,7 +100,7 @@ There you'll find...
     NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2021-09-09__.
+the file extension. As of time of writing this is __2021-10-28__.
 
 The files may also have a revision number if a change (improvement) to
 the data files was made but not using new data exported from shadow Sierra.
