@@ -55,10 +55,11 @@ dat[!is.na(isbn),
                                   },
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
-                                  cl=7)]
+                                  cl=3)]
 #    39 minutes
 # or 24 minutes
 # or 13 minutes
+# or 58 minutes
 
 # --------------------------------------------------------------- #
 
@@ -69,7 +70,7 @@ dat[!is.na(issn),
                                   mapfun=function(x){normalize_issn(x)},
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
-                                  cl=7)]
+                                  cl=3)]
 # 2 minutes
 
 # --------------------------------------------------------------- #
@@ -102,10 +103,11 @@ dat[!is.na(oclc),
                                   mapfun=function(x){clean_oclc(x)},
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
-                                  cl=7)]
+                                  cl=3)]
 #    30 minutes
 # or 18 minutes
 # or 26 minutes
+# or 18 minutes
 
 
 # --------------------------------------------------------------- #
@@ -181,7 +183,8 @@ dat[!is.na(lccall) & str_detect(lccall, ";"),
                                     filterfun=remove_duplicates_and_nas, cl=7)]
 
 dat[, lc_subject_class:=get_lc_call_subject_classification(lccall)]
-dat[, lc_subject_subclass:=get_lc_call_subject_classification(lccall, subclassification=TRUE)]
+dat[, lc_subject_subclass:=get_lc_call_subject_classification(lccall,
+                                                              subclassification=TRUE)]
 
 dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_class")
 # 58% is NA
