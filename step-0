@@ -5,12 +5,51 @@ $ time pg_dump --host="bib-service-production-rep.cvy7z512hcjg.us-east-1.rds.ama
 
 $ time pg_dump --host="item-service-production-rep.cvy7z512hcjg.us-east-1.rds.amazonaws.com" --port=5432 --dbname="item_service_production" --table=item --user=apfischetti > full-item-dump.sql
 
+
 -----BEGIN PGP MESSAGE-----
 
-jA0ECQMKzWm6daz1mTj/0kgBi7wKoWwU9lAx5K1NAgFfPjreTDnfvmsXwY53M2/h
-9PbiVJWU6pOX1/GYnhUdhymHcIESkvNKTveYcn5Lo557rfbzn0aCFQA=
-=btJh
+hF4Drdz71ruF25sSAQdAS2TNCPlVJzLcBOJmh2nN3joU78qcnErkf8y20gbzDUQw
+viVxidQbtlPZm0l2UujmUnktYIFeS+h6KepGm7K9hpoWXgC3dD5YA0bxYkKp5qs6
+0sAEAR/A6x3+Ts8cP6GnfZ+GiSCYYJ0nH9Y9inbIw52ulw8M3N36LPdv+ehzVwmr
+EZNwBTdBl5usjsuqgQjFPDwK6SczT01Uxo0USm8z0NffUYWMiKVA7FxsLYAeeiyS
+IGrACTjZDoe/S32gxPdd6rYQYo+YQq+00k5+6WHdyzmTgpliFh3+ryiGyNW+q045
+dJxyIHEPPbDaYIGumJw5Jn+hYEQUt1ZeQ0+5WFVqg1dKblsP3N9z2rrpsnaSazoj
+fyhpYG8W0w==
+=TSyj
 -----END PGP MESSAGE-----
+
+
+
+
+-------------------------------
+#### My idiosyncratic info for 2021-10-28:
+
+### BIBS
+hours: 3.8 <- ? <- 3.1
+113G <- 119G <- ? <- 100G
+
+$ time wc -l < full-bib-dump.sql
+lines: 21,712,294 <- 21,613,873 <- 18,195,994 <- 18,077,746
+
+$ time pigz full-bib-dump.sql
+minutes: __
+size: 113G -> 13G | 119G -> 13G | <- ? | 100G -> 11G
+
+
+
+### ITEMS
+hours: 3.5 <- 3 <- 8.5 <- 2.9
+size: 91G <- 98G <- 85G <- 84G
+
+$ time wc -l full-item-dump-2021-03-18.sql
+lines: 39,964,338 <- 39,824,910 <- 35,945,571 <- 35,716,610
+
+$ time pigz full-item-dump-2021-03-18.sql
+time: 2.7 minutes
+91 -> 4.5 | 98G -> 4.8G | 85G -> 4.4G |  84G -> 4.3G
+
+;;;;;;;;;;;;;;;;;;;;;;;
+
 
 -------------------------------
 #### My idiosyncratic info for 2021-09-09:
@@ -35,12 +74,11 @@ $ time wc -l full-item-dump-2021-03-18.sql
 39,824,910 <- 35,945,571 <- 35,716,610
 
 $ time pigz full-item-dump-2021-03-18.sql
-4.3G    full-item-dump-2021-03-18.sql.gz
 98 G -> 4.8G | 85 -> 4.4 |  84 -> 4.3
 
 
 -------------------------------
-#### My idiosyncratic info for 2021-07-01:
+#### My idiosyncratic info for 2021-04-08:
 
 ### BIBS
 18,195,994 <- 18,077,746
