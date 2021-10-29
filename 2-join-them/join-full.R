@@ -64,7 +64,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15770812, success_fun=success_report) # 2020-07
 # bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
 # bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
-bibs %>% verify(nrow(.) >= 195240937, success_fun=success_report) # 2021-09-09
+# bibs %>% verify(nrow(.) >= 19524093, success_fun=success_report) # 2021-09-09
+bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
 
 
 items[, .N]
@@ -73,7 +74,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 24534875, success_fun=success_report) # 2020-07
 # items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
 # items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
-items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
+# items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
+items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -110,7 +112,12 @@ gc()
 # I'm leaving it here so that IT NEVER HAPPENS AGAIN
 # comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
 
-comb <- comb[!str_detect(item_location_str_dp, "OFFSITE . Request In Advance . [pc]ul")]
+# 2021-10-28: this is the first time harvard is in the mix
+comb <- comb[!(str_detect(item_location_str_dp,
+                          "OFFSITE . Request In Advance . (pul|cul|hl)") |
+               str_detect(item_location_str_dp,
+                          "OFFSITE . ReCAP Partner"))]
+
 
 setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable"))
 
@@ -132,13 +139,15 @@ comb <- comb[!is.na(itype_dp),]
 
 # using 49 GBs of memory (old)
 # using 35 GBs of memory (old)
-# using 42 GBs of memory
+# using 42 GBs of memory (old)
+# using 44 GBs of memory
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
 # comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
 # comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
-comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
+# comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
+comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
 
 
 
