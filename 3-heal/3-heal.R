@@ -117,10 +117,8 @@ dat[!is.na(oclc),
 
 # getting the date from the 008 is a dead end
 
-### CHANGE EVERY YEAR
-### CHANGE EVERY YEAR
-### CHANGE EVERY YEAR
-CURRENT_YEAR <- 2021
+
+CURRENT_YEAR <- as.integer(str_sub(expdate, 0, 4))
 dat[!is.na(pub_year) & pub_year > CURRENT_YEAR, pub_year:=NA]
 dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]
 dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
@@ -156,6 +154,7 @@ dat[, is_mixed_bib:=uniqueN(branch_or_research)>1, bibid]
 dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-04: 99.77%
 # 2021-09: 99.75%
+# 2022-04: 99.78%
 
 dat[, callnum2:=str_replace(callnum2, "[^\\d.].*$", "")]
 dat[!str_detect(callnum2, "^\\d"), callnum2:=NA]
@@ -164,6 +163,7 @@ dat[!is.na(callnum2), .(callnum2)]
 dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-04: 30% :(
 # 2021-09: 32% :(
+# 2022-04: 32% :(
 
 
 dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
@@ -195,5 +195,6 @@ dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_subcl
 
 
 set_lb_date(dat, expdate)
-dat %>% fwrite_plus_date("./target/big-healed-sierra-comb-just-two-years.dat.gz")
+dat %>% fwrite_plus_date("./target/big-healed-sierra-comb-just-two-years.dat.gz",
+                         sep="\t")
 

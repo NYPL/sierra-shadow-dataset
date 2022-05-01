@@ -65,7 +65,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15996119, success_fun=success_report) # 2021-04-08
 # bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
 # bibs %>% verify(nrow(.) >= 19524093, success_fun=success_report) # 2021-09-09
-bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
+# bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
+bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
 
 
 items[, .N]
@@ -75,7 +76,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 24033693, success_fun=success_report) # 2021-04-08 # !!!
 # items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
 # items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
-items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
+# items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
+items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -147,10 +149,11 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15715406, success_fun=success_report) # 2021-04-08
 # comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
 # comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
-comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
+# comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
+comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
 
 
 
 set_lb_date(comb, expdate)
-comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz")
+comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz", sep="\t")
 
