@@ -12,8 +12,8 @@ BIB_PATH=$EXACT_LOCATION/$BIB_PATH
 ITEM_PATH=$(ls $EXACT_LOCATION | grep item)
 ITEM_PATH=$EXACT_LOCATION/$ITEM_PATH
 
-echo $BIB_PATH
-echo $ITEM_PATH
+echo "-> $BIB_PATH"
+echo "-> $ITEM_PATH"
 
 # BIBS
 zcat $BIB_PATH | ./bibs/export-bib-info-first-step.py
