@@ -58,6 +58,7 @@ items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-
 
 # using 29 GB of RAM now
 
+
 bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15364558, success_fun=success_report) # 2019-10
 # bibs %>% verify(nrow(.) >= 15525387, success_fun=success_report) # 2019-12
@@ -66,7 +67,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 16109207, success_fun=success_report) # 2021-07-11
 # bibs %>% verify(nrow(.) >= 19524093, success_fun=success_report) # 2021-09-09
 # bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
-bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
+# bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
+bibs %>% verify(nrow(.) >= 19886220, success_fun=success_report) # 2022-07-20
 
 
 items[, .N]
@@ -77,7 +79,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 24252847, success_fun=success_report) # 2021-07-11
 # items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
 # items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
-items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
+# items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
+items %>% verify(nrow(.) >= 27735720, success_fun=success_report) # 2022-07-20 # !!!
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -143,6 +146,7 @@ comb <- comb[!is.na(itype_dp),]
 # using 35 GBs of memory (old)
 # using 42 GBs of memory (old)
 # using 44 GBs of memory
+# using 48 GBs of memory
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
@@ -150,7 +154,10 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 16122847, success_fun=success_report) # 2021-07-11
 # comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
 # comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
-comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
+# comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
+comb %>% verify(nrow(.) >= 15586010, success_fun=success_report) # 2022-07-20 # !!!
+
+
 
 
 
