@@ -7,13 +7,14 @@ import json
 import fileinput
 
 
-TOTAL_LINES = 39964338
+TOTAL_LINES = 40983842
 
 # 2020-07-23:   35,327,625
 # 2021-03-18:   36,444,424    (+ 1,116,800)
 # 2021-09-09:   39,824,910    (+ 3,380,486)
 # 2021-10-28:   39,964,338    (+   139,428)
 # 2022-04-30:   40,683,831    (+   719,493)
+# 2022-07-20:   40,983,842    (+   300,011)
 
 
 DEBUG = True
@@ -60,7 +61,7 @@ def get_bibid(alist, itemid):
     # if len(alist) > 1:
     #     return "NA"
     if len(alist) == 0:
-        return "NA"
+        return ("NA", hasmultbibids)
     if len(alist) > 1:
         efh.write("MORE THAN ONE BIB FOR ITEM: {}\n".format(itemid))
         hasmultbibids = "TRUE"
@@ -190,6 +191,7 @@ for currentline in fileinput.input():
     bibids, hasmultbibids       = get_bibid(raw_fields[5], iid)
     barcode                     = get_barcode(raw_fields[8])
     callnum                     = get_callnum(raw_fields[9])
+
     try:
         fixed                   = json.loads(raw_fields[11])
     except:
@@ -239,4 +241,5 @@ print("LINES EXPORTED:                              {}".format(LINES_EXPORTED))
 # 2021-09-09:       27,303,801  69.5%   (+ 3,050,954)
 # 2021-10-28:       27,407,394
 # 2022-04-30:       27,952,209          (+   544,815)
+# 2022-07-20:       27,735,720          (-   216,489)
 
