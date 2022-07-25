@@ -60,6 +60,7 @@ dat[!is.na(isbn),
 # or 24 minutes
 # or 13 minutes
 # or 58 minutes
+# or 31 minutes
 
 # --------------------------------------------------------------- #
 
@@ -108,6 +109,7 @@ dat[!is.na(oclc),
 # or 18 minutes
 # or 26 minutes
 # or 18 minutes
+# or 26 minutes
 
 
 # --------------------------------------------------------------- #
@@ -164,6 +166,7 @@ dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-04: 30% :(
 # 2021-09: 32% :(
 # 2022-04: 32% :(
+# 2022-07: 34%
 
 
 dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]

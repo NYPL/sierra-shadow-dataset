@@ -38,10 +38,10 @@ dat <- fread_plus_date("../3-heal/target/big-healed-sierra-comb-just-two-years.d
 expdate <- attr(dat, "lb.date")
 
 # ensures that years aren't messed up
-if(as.Date(expdate) > as.Date("2022-06-30"))
+if(as.Date(expdate) > as.Date("2023-06-30"))
   stop("new year. make sure you update this script")
 
-old <- fread("../data/historical-circ/historical-circ-fy17-fy20.dat.gz")
+old <- fread("../data/historical-circ/historical-circ-fy17-fy21.dat.gz")
 
 dat %>% names
 
@@ -80,7 +80,7 @@ dat[bibid=="20869063", .(title, total_checkouts, total_renewals, last_year_circ,
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
-setnames(dat, "last_year_circ", "fy21_checkouts")
+setnames(dat, "last_year_circ", "fy21_checkoutsp")
 setnames(dat, "this_year_circ", "fy22_checkouts")
 
 setkey(old, "bibid", "itemid")
@@ -88,10 +88,29 @@ setkey(dat, "bibid", "itemid")
 
 dat %>% merge(old, all.x=TRUE) -> comb
 
+comb %>% names
+
+# comb[!is.na(fy21_checkouts) & !is.na(fy21_checkoutsp),
+#      .(fy21_checkouts, fy21_checkoutsp)]
+#
+# comb[!is.na(fy21_checkouts) & !is.na(fy21_checkoutsp) &
+#      fy21_checkoutsp > fy21_checkouts,
+#      .(fy21_checkouts, fy21_checkoutsp)][,.N]
+#
+# comb[!is.na(fy21_checkouts) & !is.na(fy21_checkoutsp) &
+#      fy21_checkoutsp < fy21_checkouts,
+#      .(fy21_checkouts, fy21_checkoutsp)][,.N]
+#
+# comb[!is.na(fy22_checkouts) & !is.na(fy21_checkoutsp) &
+#      fy21_checkoutsp < fy21_checkouts,
+#      .(fy21_checkouts, fy21_checkoutsp)][,.N]
+#
+# comb[, fy21_checkoutsp:=NULL]
+
+
 rm(dat)
 rm(old)
 gc()
-
 
 comb[bibid=="11463118"] # common lisp companion
 comb[bibid=="11366725"] # SICP
@@ -194,6 +213,7 @@ research[, .N]
 # 2021-04-08: 10,888,765
 # 2020-07-23: 10,895,556
 # 2022-04-30: 11,079,697
+# 2022-07-20: 11,111,941
 
 
 

@@ -30,16 +30,17 @@ source("~/.rix/tony-utils.R")
 ##### THIS WILL CHANGE EACH FISCAL YEAR #####
 #############################################
 
-old <- fread("../data/historical-circ/historical-circ-fy17-19.dat.gz")
+old <- fread("../data/historical-circ/historical-circ-fy17-fy20.dat.gz")
 
-lessold <- fread("../target/sierra-all-healed-joined-2021-07-11.dat.gz",
+lessold <- fread("../target/sierra-all-healed-joined-2022-04-30.dat.gz",
                  select=c("bibid", "itemid", "fy17_checkouts",
                           "fy18_checkouts", "fy19_checkouts",
                           "fy20_checkouts", "fy21_checkouts"))
 
 
 setnames(old, c("bibid", "itemid", "oldfy17_checkouts",
-                "oldfy18_checkouts", "oldfy19_checkouts"))
+                "oldfy18_checkouts", "oldfy19_checkouts",
+                 "oldfy20_checkouts"))
 
 setkey(old,     "itemid", "bibid")
 setkey(lessold, "itemid", "bibid")
@@ -70,7 +71,7 @@ comb[bibid==20869063]     # :)
 comb[,oldfy17_checkouts:=NULL]
 comb[,oldfy18_checkouts:=NULL]
 comb[,oldfy19_checkouts:=NULL]
-comb[,fy21_checkouts:=NULL]
+comb[,oldfy20_checkouts:=NULL]
 
 setcolorder(comb, c("bibid", "itemid"))
 
@@ -79,5 +80,5 @@ rm(lessold)
 gc()
 
 
-comb %>% fwrite("../data/historical-circ/historical-circ-fy17-fy20.dat.gz")
+comb %>% fwrite("../data/historical-circ/historical-circ-fy17-fy21.dat.gz")
 
