@@ -1,4 +1,11 @@
 
+2022-10-28
+  - `callnum2` was renamed to `ddc` (to underscore that it is,
+     in fact Dewey Decimal numbers
+
+2022-04-30
+  - Nothing to report
+
 2021-10-28
   - Just an update. Everything looks ok
 
