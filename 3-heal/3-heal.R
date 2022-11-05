@@ -158,20 +158,27 @@ dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-09: 99.75%
 # 2022-04: 99.78%
 
-dat[, callnum2:=str_replace(callnum2, "[^\\d.].*$", "")]
-dat[!str_detect(callnum2, "^\\d"), callnum2:=NA]
+dat[, ddc:=str_replace(callnum2, "[^\\d.].*$", "")]
+dat[!str_detect(ddc, "^\\d"), ddc:=NA]
 
-dat[!is.na(callnum2), .(callnum2)]
-dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
+dat[!is.na(ddc), .(ddc)]
+dat[branch_or_research=="branch",] %>% dt_percent_not_na("ddc")
 # 2021-04: 30% :(
 # 2021-09: 32% :(
 # 2022-04: 32% :(
 # 2022-07: 34%
 
+dat[is.na(ddc) & str_detect(item_callnum, "^\\d{3}"), .(ddc, item_callnum)]
 
-dat[, dewey_class:=get_dewey_decimal_subject_class(callnum2)]
-dat[, dewey_division:=get_dewey_decimal_subject_division(callnum2)]
-dat[, dewey_section:=get_dewey_decimal_subject_section(callnum2)]
+dat[branch_or_research=="branch" &
+      is.na(ddc) &
+      str_detect(item_callnum, "^\\d{3}"),
+    ddc:=str_replace(item_callnum, "[^\\d.].*$", "")]
+dat[!str_detect(ddc, "^\\d"), ddc:=NA]
+
+dat[, dewey_class:=get_dewey_decimal_subject_class(ddc)]
+dat[, dewey_division:=get_dewey_decimal_subject_division(ddc)]
+dat[, dewey_section:=get_dewey_decimal_subject_section(ddc)]
 
 ## END DEWEY
 

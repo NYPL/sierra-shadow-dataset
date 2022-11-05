@@ -341,7 +341,7 @@ The (final) output files are:
 
     Library of Congress call number.
 
-  - `callnum2`
+  - `ddc`
 
     Dewey/branch call numbers. 99.7% present for branch items. Only 30%
     after cleaning and removing non-dewey fiction call numbers
