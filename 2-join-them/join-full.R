@@ -68,7 +68,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 19524093, success_fun=success_report) # 2021-09-09
 # bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
 # bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
-bibs %>% verify(nrow(.) >= 19886220, success_fun=success_report) # 2022-07-20
+# bibs %>% verify(nrow(.) >= 19886220, success_fun=success_report) # 2022-07-20
+bibs %>% verify(nrow(.) >= 20031229, success_fun=success_report) # 2022-10-28
 
 
 items[, .N]
@@ -80,12 +81,14 @@ items[, .N]
 # items %>% verify(nrow(.) >= 27303800, success_fun=success_report) # 2021-09-09
 # items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
 # items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
-items %>% verify(nrow(.) >= 27735720, success_fun=success_report) # 2022-07-20 # !!!
+# items %>% verify(nrow(.) >= 27735720, success_fun=success_report) # 2022-07-20 # !!!
+items %>% verify(nrow(.) >= 27950337, success_fun=success_report) # 2022-10-28
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
 
 
+# bibs %>% dt_counts_and_percents("source")
 bibs <- bibs[source=="sierra-nypl"]
 
 
@@ -145,7 +148,7 @@ comb <- comb[!is.na(itype_dp),]
 # using 49 GBs of memory (old)
 # using 35 GBs of memory (old)
 # using 42 GBs of memory (old)
-# using 44 GBs of memory
+# using 44 GBs of memory (old)
 # using 48 GBs of memory
 
 comb[, .N]
@@ -155,7 +158,8 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15425546, success_fun=success_report) # 2021-09-09
 # comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
 # comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
-comb %>% verify(nrow(.) >= 15586010, success_fun=success_report) # 2022-07-20 # !!!
+# comb %>% verify(nrow(.) >= 15586010, success_fun=success_report) # 2022-07-20 # !!!
+comb %>% verify(nrow(.) >= 15653986, success_fun=success_report) # 2022-10-28 # !!!
 
 
 
