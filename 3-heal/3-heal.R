@@ -61,6 +61,7 @@ dat[!is.na(isbn),
 # or 13 minutes
 # or 58 minutes
 # or 31 minutes
+# or 1 hour and 18 minutes
 
 # --------------------------------------------------------------- #
 
@@ -79,8 +80,9 @@ dat[!is.na(issn),
 ##########
 ####  LCCN
 dat[, lccn:=normalize_lccn(lccn)]
-# 2 minutes
 
+# 2 minutes
+# or 14 minutes
 
 # --------------------------------------------------------------- #
 
@@ -110,6 +112,7 @@ dat[!is.na(oclc),
 # or 26 minutes
 # or 18 minutes
 # or 26 minutes
+# or 1 hour and 5 minutes
 
 
 # --------------------------------------------------------------- #
@@ -158,8 +161,16 @@ dat[branch_or_research=="branch",] %>% dt_percent_not_na("callnum2")
 # 2021-09: 99.75%
 # 2022-04: 99.78%
 
-dat[, ddc:=str_replace(callnum2, "[^\\d.].*$", "")]
+dat[, ddc:=str_replace(callnum2, "[^\\d\\.].*$", "")]
 dat[!str_detect(ddc, "^\\d"), ddc:=NA]
+
+# some are hanging out in `item_callnum`
+dat[is.na(ddc) &
+    str_detect(item_callnum, "^\\d{3}") &
+    branch_or_research=="branch",
+  ddc:=str_replace(item_callnum, "[^\\d\\.].*$", "")]
+dat[!str_detect(ddc, "^\\d"), ddc:=NA]
+
 
 dat[!is.na(ddc), .(ddc)]
 dat[branch_or_research=="branch",] %>% dt_percent_not_na("ddc")
@@ -168,19 +179,12 @@ dat[branch_or_research=="branch",] %>% dt_percent_not_na("ddc")
 # 2022-04: 32% :(
 # 2022-07: 34%
 
-dat[is.na(ddc) & str_detect(item_callnum, "^\\d{3}"), .(ddc, item_callnum)]
-
-dat[branch_or_research=="branch" &
-      is.na(ddc) &
-      str_detect(item_callnum, "^\\d{3}"),
-    ddc:=str_replace(item_callnum, "[^\\d.].*$", "")]
-dat[!str_detect(ddc, "^\\d"), ddc:=NA]
-
 dat[, dewey_class:=get_dewey_decimal_subject_class(ddc)]
 dat[, dewey_division:=get_dewey_decimal_subject_division(ddc)]
 dat[, dewey_section:=get_dewey_decimal_subject_section(ddc)]
 
 ## END DEWEY
+
 
 
 ## BEGIN LC
@@ -197,9 +201,9 @@ dat[, lc_subject_subclass:=get_lc_call_subject_classification(lccall,
                                                               subclassification=TRUE)]
 
 dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_class")
-# 58% is NA
+# 57% is NA
 dat[branch_or_research=="research"] %>% dt_counts_and_percents("lc_subject_subclass")
-# 58% is NA
+# 57% is NA
 
 # --------------------------------------------------------------- #
 
