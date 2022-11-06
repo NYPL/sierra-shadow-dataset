@@ -45,35 +45,40 @@ old <- fread("../data/historical-circ/historical-circ-fy17-fy21.dat.gz")
 
 dat %>% names
 
+
+compare <- function(lookupbibid){
+  print(old[bibid==lookupbibid])
+  print(dat[bibid==lookupbibid, .(title, total_checkouts, total_renewals,
+                                  last_year_circ, this_year_circ)])
+}
+
+
 # common lisp companion
-old[bibid=="11463118", ]
-dat[bibid=="11463118", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("11463118")
 
 # knot book comparison
-old[bibid=="11315077"]
-dat[bibid=="11315077"]
-dat[itemid=="14021710"]
-dat[bibid=="11315077", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("11315077")
 
 # de sueños azules y contrasueños
-old[bibid=="12453190"]
-dat[bibid=="12453190", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("12453190")
 
 # SICP
-old[bibid=="11366725"]
-dat[bibid=="11366725", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("11366725")
 
 # probable and provable
-old[bibid=="11061659"]
-dat[bibid=="11061659", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("11061659")
 
 # art and culture (clement greenberg)
-old[bibid=="13967181"]
-dat[bibid=="13967181", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("13967181")
 
 # :)
-old[bibid=="20869063"]
-dat[bibid=="20869063", .(title, total_checkouts, total_renewals, last_year_circ, this_year_circ)]
+compare("20869063")
+
+
+# dat[branch_or_research=="research", .(bibid, this_year_circ)][order(-this_year_circ)]
+
+# NOTE: "THIS YEARS CIRC" IS STILL FY22!!!
+compare("11265824")
 
 
 
@@ -104,8 +109,8 @@ comb %>% names
 # comb[!is.na(fy22_checkouts) & !is.na(fy21_checkoutsp) &
 #      fy21_checkoutsp < fy21_checkouts,
 #      .(fy21_checkouts, fy21_checkoutsp)][,.N]
-#
-# comb[, fy21_checkoutsp:=NULL]
+
+comb[, fy21_checkoutsp:=NULL]
 
 
 rm(dat)
@@ -126,7 +131,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 68
+comb %>% names %>% length     # 70
 
 setkey(comb, "bibid")
 
@@ -182,7 +187,7 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "bib_fy18_checkouts", "bib_fy19_checkouts",
                 "bib_fy20_checkouts", "bib_fy21_checkouts",
                 "bib_fy22_checkouts", "bib_total_checkouts",
-                "bib_total_renewals", "bib_total_circ", "dewey_class",
+                "bib_total_renewals", "bib_total_circ","dewey_class",
                 "dewey_division", "dewey_section", "lc_subject_class",
                 "lc_subject_subclass")
 setcolorder(big, finalorder)
@@ -214,6 +219,7 @@ research[, .N]
 # 2020-07-23: 10,895,556
 # 2022-04-30: 11,079,697
 # 2022-07-20: 11,111,941
+# 2022-10-28: 11,149,249
 
 
 

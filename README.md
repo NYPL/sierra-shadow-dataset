@@ -100,7 +100,7 @@ There you'll find...
     NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2022-03-30__.
+the file extension. As of time of writing this is __2022-10-28__.
 
 The files may also have a revision number if a change (improvement) to
 the data files was made but not using new data exported from shadow Sierra.
@@ -340,6 +340,11 @@ The (final) output files are:
   - `lccall`
 
     Library of Congress call number.
+
+  - `callnum2`
+
+    Mostly dewey/branch call numbers. This is processed and, if it's
+    truly a DDC, it's put into the next column, called `ddc`
 
   - `ddc`
 
