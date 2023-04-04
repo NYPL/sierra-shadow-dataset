@@ -30,7 +30,7 @@ library(assertr)
 # on a machine with data.table using 10 threads (4.6 GHz)
 #   and 64 GB RAM available)
 
-# 5.5 minutes
+# 12 minutes
   system.time(
 bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
                         quote="", strip.white=FALSE,
@@ -44,7 +44,7 @@ bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-pyt
 expdate <- attr(bibs, "lb.date")
 
 
-# 1.5 minutes
+# 6 minutes
   system.time(
 items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
                          na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
@@ -56,7 +56,7 @@ items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-
                                       "item_location_str_dp"="factor"))
   )
 
-# using 29 GB of RAM now
+# using 32 GB of RAM now
 
 
 bibs[, .N]
@@ -69,7 +69,10 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 19619753, success_fun=success_report) # 2021-10-28
 # bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
 # bibs %>% verify(nrow(.) >= 19886220, success_fun=success_report) # 2022-07-20
-bibs %>% verify(nrow(.) >= 20031229, success_fun=success_report) # 2022-10-28
+# bibs %>% verify(nrow(.) >= 20031229, success_fun=success_report) # 2022-10-28
+bibs %>% verify(nrow(.) >= 20243751, success_fun=success_report) # 2023-04-03
+
+
 
 
 items[, .N]
@@ -82,7 +85,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 27407393, success_fun=success_report) # 2021-10-28
 # items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
 # items %>% verify(nrow(.) >= 27735720, success_fun=success_report) # 2022-07-20 # !!!
-items %>% verify(nrow(.) >= 27950337, success_fun=success_report) # 2022-10-28
+# items %>% verify(nrow(.) >= 27950337, success_fun=success_report) # 2022-10-28
+items %>% verify(nrow(.) >= 28178231, success_fun=success_report) # 2023-04-03
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -106,7 +110,7 @@ items <- items[str_detect(bibid, "^\\d+$"), ]
 items[, initemtable:=TRUE]
 
 
-# about 2.5 minutes
+# about 3.5 minutes
   system.time(
 bibs %>% merge(items, all=TRUE) -> comb
   )
@@ -120,7 +124,7 @@ gc()
 # I'm leaving it here so that IT NEVER HAPPENS AGAIN
 # comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
 
-# 2021-10-28: this is the first time harvard is in the mix
+# 2022-10-28: this is the first time harvard is in the mix
 comb <- comb[!(str_detect(item_location_str_dp,
                           "OFFSITE . Request In Advance . (pul|cul|hl)") |
                str_detect(item_location_str_dp,
@@ -138,6 +142,10 @@ comb[bibid=="20869063"]     # :)
 # I took out 2020-12
 comb[bibid=="11315077"]
 comb[itemid=="14021710"]
+
+# book about arduino that I took out
+# late March 2023
+comb[bibid=="19375763"]
 
 
 comb <- comb[inbibtable==TRUE]
@@ -159,10 +167,8 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15495704, success_fun=success_report) # 2021-10-28
 # comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
 # comb %>% verify(nrow(.) >= 15586010, success_fun=success_report) # 2022-07-20 # !!!
-comb %>% verify(nrow(.) >= 15653986, success_fun=success_report) # 2022-10-28 # !!!
-
-
-
+# comb %>% verify(nrow(.) >= 15653986, success_fun=success_report) # 2022-10-28 # !!!
+comb %>% verify(nrow(.) >= 15755737, success_fun=success_report) # 2023-04-03
 
 
 set_lb_date(comb, expdate)
