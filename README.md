@@ -469,6 +469,8 @@ The (final) output files are:
 
   - `fy22_checkouts`
 
+  - `fy23_checkouts`
+
   - `bib_fy17_checkouts`
 
     Sum of FY17 checkouts for all items under bibid (very useful)
@@ -492,6 +494,10 @@ The (final) output files are:
   - `bib_fy22_checkouts`
 
     Sum of FY22 checkouts for all items under bibid (very useful)
+
+  - `bib_fy23_checkouts`
+
+    Sum of FY23 checkouts for all items under bibid (very useful)
 
   - `bib_total_checkouts`
 

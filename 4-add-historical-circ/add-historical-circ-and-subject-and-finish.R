@@ -53,6 +53,9 @@ compare <- function(lookupbibid){
 }
 
 
+# arduino internals
+compare("19375763")
+
 # common lisp companion
 compare("11463118")
 
@@ -85,8 +88,8 @@ compare("11265824")
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
-setnames(dat, "last_year_circ", "fy21_checkoutsp")
-setnames(dat, "this_year_circ", "fy22_checkouts")
+setnames(dat, "last_year_circ", "fy22_checkoutsp")
+setnames(dat, "this_year_circ", "fy23_checkouts")
 
 setkey(old, "bibid", "itemid")
 setkey(dat, "bibid", "itemid")
@@ -110,13 +113,15 @@ comb %>% names
 #      fy21_checkoutsp < fy21_checkouts,
 #      .(fy21_checkouts, fy21_checkoutsp)][,.N]
 
-comb[, fy21_checkoutsp:=NULL]
+# comb[, fy21_checkoutsp:=NULL]
+setnames(comb, "fy22_checkoutsp", "fy22_checkouts")
 
 
 rm(dat)
 rm(old)
 gc()
 
+comb[bibid=="19375763"] # arduino internals
 comb[bibid=="11463118"] # common lisp companion
 comb[bibid=="11366725"] # SICP
 comb[bibid=="11061659"] # probable and provable
@@ -145,6 +150,7 @@ comb[, .(bib_fy17_checkouts         = sum(fy17_checkouts, na.rm=TRUE),
          bib_fy20_checkouts         = sum(fy20_checkouts, na.rm=TRUE),
          bib_fy21_checkouts         = sum(fy21_checkouts, na.rm=TRUE),
          bib_fy22_checkouts         = sum(fy22_checkouts, na.rm=TRUE),
+         bib_fy23_checkouts         = sum(fy23_checkouts, na.rm=TRUE),
          bib_total_checkouts        = sum(total_checkouts, na.rm=TRUE),
          bib_total_renewals         = sum(total_renewals, na.rm=TRUE),
          bib_total_circ             = sum(total_circ, na.rm=TRUE)),
@@ -183,10 +189,11 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "item_callnum", "created_date", "status", "total_checkouts",
                 "total_renewals", "total_circ", "fy17_checkouts",
                 "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
-                "fy21_checkouts", "fy22_checkouts", "bib_fy17_checkouts",
-                "bib_fy18_checkouts", "bib_fy19_checkouts",
-                "bib_fy20_checkouts", "bib_fy21_checkouts",
-                "bib_fy22_checkouts", "bib_total_checkouts",
+                "fy21_checkouts", "fy22_checkouts", "fy23_checkouts",
+                "bib_fy17_checkouts", "bib_fy18_checkouts",
+                "bib_fy19_checkouts", "bib_fy20_checkouts",
+                "bib_fy21_checkouts", "bib_fy22_checkouts",
+                "bib_fy23_checkouts", "bib_total_checkouts",
                 "bib_total_renewals", "bib_total_circ","dewey_class",
                 "dewey_division", "dewey_section", "lc_subject_class",
                 "lc_subject_subclass")
@@ -220,6 +227,7 @@ research[, .N]
 # 2022-04-30: 11,079,697
 # 2022-07-20: 11,111,941
 # 2022-10-28: 11,149,249
+# 2023-04-03: 11,246,823
 
 
 
@@ -240,6 +248,7 @@ research[, .(bib_fy17_checkouts           = sum(fy17_checkouts, na.rm=TRUE),
              bib_fy20_checkouts           = sum(fy20_checkouts, na.rm=TRUE),
              bib_fy21_checkouts           = sum(fy21_checkouts, na.rm=TRUE),
              bib_fy22_checkouts           = sum(fy22_checkouts, na.rm=TRUE),
+             bib_fy23_checkouts           = sum(fy23_checkouts, na.rm=TRUE),
              bib_total_checkouts          = sum(total_checkouts, na.rm=TRUE),
              bib_total_renewals           = sum(total_renewals, na.rm=TRUE),
              bib_total_circ               = sum(total_circ, na.rm=TRUE)),
