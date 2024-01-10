@@ -30,12 +30,13 @@ library(assertr)
 # on a machine with data.table using 10 threads (4.6 GHz)
 #   and 64 GB RAM available)
 
-# 12 minutes
+# 12 minutes / 6 minutes
   system.time(
 bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
                         quote="", strip.white=FALSE,
                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
                         colClasses=c("suppressed"="factor", "source"="factor",
+                                     "catalogdate"="character",
                                      "biblevel"="factor", "mattype"="factor",
                                      "langcode"="factor", "lang"="factor",
                                      "countrycode"="factor", "country"="factor",
@@ -44,7 +45,7 @@ bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-pyt
 expdate <- attr(bibs, "lb.date")
 
 
-# 6 minutes
+# 6 minutes / less than 2 (?)
   system.time(
 items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
                          na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
@@ -70,7 +71,9 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 19812250, success_fun=success_report) # 2022-04-30
 # bibs %>% verify(nrow(.) >= 19886220, success_fun=success_report) # 2022-07-20
 # bibs %>% verify(nrow(.) >= 20031229, success_fun=success_report) # 2022-10-28
-bibs %>% verify(nrow(.) >= 20243751, success_fun=success_report) # 2023-04-03
+# bibs %>% verify(nrow(.) >= 20243751, success_fun=success_report) # 2023-04-03
+# bibs %>% verify(nrow(.) >= 20331796, success_fun=success_report) # 2023-07-10
+bibs %>% verify(nrow(.) >= 21328118, success_fun=success_report) # 2024-01-08
 
 
 
@@ -86,7 +89,9 @@ items[, .N]
 # items %>% verify(nrow(.) >= 27952208, success_fun=success_report) # 2022-04-30
 # items %>% verify(nrow(.) >= 27735720, success_fun=success_report) # 2022-07-20 # !!!
 # items %>% verify(nrow(.) >= 27950337, success_fun=success_report) # 2022-10-28
-items %>% verify(nrow(.) >= 28178231, success_fun=success_report) # 2023-04-03
+# items %>% verify(nrow(.) >= 28178231, success_fun=success_report) # 2023-04-03
+# items %>% verify(nrow(.) >= 28438103, success_fun=success_report) # 2023-07-10
+items %>% verify(nrow(.) >= 29988322, success_fun=success_report) # 2024-01-08
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -94,6 +99,7 @@ bibs[, bibid:=str_replace_all(bibid, '"', "")]
 
 # bibs %>% dt_counts_and_percents("source")
 bibs <- bibs[source=="sierra-nypl"]
+gc()
 
 
 setnames(items, "bibid_dp", "bibid")
@@ -112,7 +118,7 @@ items[, initemtable:=TRUE]
 
 # about 3.5 minutes
   system.time(
-bibs %>% merge(items, all=TRUE) -> comb
+bibs %>% merge.data.table(items, all=TRUE) -> comb
   )
 
 rm(bibs)
@@ -157,7 +163,8 @@ comb <- comb[!is.na(itype_dp),]
 # using 35 GBs of memory (old)
 # using 42 GBs of memory (old)
 # using 44 GBs of memory (old)
-# using 48 GBs of memory
+# using 48 GBs of memory (old)
+# using 51 GBs of memory
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
@@ -168,7 +175,9 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15853613, success_fun=success_report) # 2022-04-30
 # comb %>% verify(nrow(.) >= 15586010, success_fun=success_report) # 2022-07-20 # !!!
 # comb %>% verify(nrow(.) >= 15653986, success_fun=success_report) # 2022-10-28 # !!!
-comb %>% verify(nrow(.) >= 15755737, success_fun=success_report) # 2023-04-03
+# comb %>% verify(nrow(.) >= 15755737, success_fun=success_report) # 2023-04-03
+# comb %>% verify(nrow(.) >= 15934042, success_fun=success_report) # 2023-07-10
+comb %>% verify(nrow(.) >= 16097191, success_fun=success_report) # 2024-01-08
 
 
 set_lb_date(comb, expdate)

@@ -31,6 +31,7 @@ library(pbapply)
 dat <- fread_plus_date("../2-join-them/target/big-sierra-comb.dat.gz",
                        strip.white=FALSE,
                        colClasses=c("suppressed"="factor", "source"="factor",
+                                    "catalogdate"="character",
                                     "biblevel"="factor", "mattype"="factor",
                                     "langcode"="factor", "lang"="factor",
                                     "countrycode"="factor", "country"="factor",

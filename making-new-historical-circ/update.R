@@ -30,17 +30,18 @@ source("~/.rix/tony-utils.R")
 ##### THIS WILL CHANGE EACH FISCAL YEAR #####
 #############################################
 
-old <- fread("../data/historical-circ/historical-circ-fy17-fy20.dat.gz")
+old <- fread("../data/historical-circ/historical-circ-fy17-fy21.dat.gz")
 
-lessold <- fread("../target/sierra-all-healed-joined-2022-04-30.dat.gz",
+lessold <- fread("../target/sierra-all-healed-joined-2023-07-10.dat.gz",
                  select=c("bibid", "itemid", "fy17_checkouts",
                           "fy18_checkouts", "fy19_checkouts",
-                          "fy20_checkouts", "fy21_checkouts"))
+                          "fy20_checkouts", "fy21_checkouts",
+                          "fy22_checkouts"))
 
 
 setnames(old, c("bibid", "itemid", "oldfy17_checkouts",
                 "oldfy18_checkouts", "oldfy19_checkouts",
-                 "oldfy20_checkouts"))
+                 "oldfy20_checkouts", "oldfy21_checkouts"))
 
 setkey(old,     "itemid", "bibid")
 setkey(lessold, "itemid", "bibid")
@@ -57,7 +58,9 @@ comb
 comb[oldfy17_checkouts!=fy17_checkouts,.N]
 comb[oldfy18_checkouts!=fy18_checkouts,.N]
 comb[oldfy19_checkouts!=fy19_checkouts,.N]
-comb[oldfy19_checkouts==fy20_checkouts,.N] < comb[,.N]
+comb[oldfy20_checkouts!=fy20_checkouts,.N]
+comb[oldfy21_checkouts!=fy21_checkouts,.N]
+# comb[oldfy19_checkouts==fy20_checkouts,.N] < comb[,.N]
 
 
 ## debugging
@@ -72,6 +75,7 @@ comb[,oldfy17_checkouts:=NULL]
 comb[,oldfy18_checkouts:=NULL]
 comb[,oldfy19_checkouts:=NULL]
 comb[,oldfy20_checkouts:=NULL]
+comb[,oldfy21_checkouts:=NULL]
 
 setcolorder(comb, c("bibid", "itemid"))
 
@@ -80,5 +84,5 @@ rm(lessold)
 gc()
 
 
-comb %>% fwrite("../data/historical-circ/historical-circ-fy17-fy21.dat.gz")
+comb %>% fwrite("../data/historical-circ/historical-circ-fy17-fy22.dat.gz")
 
