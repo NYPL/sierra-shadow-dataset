@@ -93,14 +93,15 @@ There you'll find...
 
   - a copy of the latest historical circ information used in the process
     for joining with with the dumps to include circ counts from previous
-    years. At time of writing, this is a 5 column gzipped tab-delimited
+    years. At time of writing, this is a 8 column gzipped tab-delimited
     dataset including `bibid`, `itemid`, `fy17_checkouts`, `fy18_checkouts`,
-    and `fy19_checkouts`. When joined with the lasted aggregation, for
-    example, this will yield FY17-to-FY20 circ information for every
+    `fy19_checkouts`, `fy20_checkouts`, `fy21_checkouts`, and
+    `fy22_checkouts`. When joined with the lasted aggregation, for
+    example, this will yield FY17-to-FY22 circ information for every
     NYPL item
 
 All of the files above include the date of the database(s) export before
-the file extension. As of time of writing this is __2022-10-28__.
+the file extension. As of time of writing this is __2024-01-08__.
 
 The files may also have a revision number if a change (improvement) to
 the data files was made but not using new data exported from shadow Sierra.
@@ -233,9 +234,9 @@ is now ready for the final stage.
 Step 4
 -----
 This final stage joins previous years' circulation data into the mix. At
-time of writing, FY17, FY18 and FY19 circulation numbers are thrown in
-with the complete FY20 and FY21 numbers, creating five consecutive years
-with by-year circulation information.
+time of writing, FY17, FY18 FY19, FY20, FY21, and FY22 circulation numbers
+are thrown in with the complete FY23 and FY24 numbers, creating eight
+consecutive years with by-year circulation information.
 
 Additionally, all of the items under each `bibid` have all of their
 circulation numbers summed. This means, that for each row (unique `bibid`
@@ -471,6 +472,8 @@ The (final) output files are:
 
   - `fy23_checkouts`
 
+  - `fy24_checkouts`
+
   - `bib_fy17_checkouts`
 
     Sum of FY17 checkouts for all items under bibid (very useful)
@@ -498,6 +501,10 @@ The (final) output files are:
   - `bib_fy23_checkouts`
 
     Sum of FY23 checkouts for all items under bibid (very useful)
+
+  - `bib_fy24_checkouts`
+
+    Sum of FY24 checkouts for all items under bibid (very useful)
 
   - `bib_total_checkouts`
 
