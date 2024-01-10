@@ -80,7 +80,7 @@ compare("20869063")
 
 # dat[branch_or_research=="research", .(bibid, this_year_circ)][order(-this_year_circ)]
 
-# NOTE: "THIS YEARS CIRC" IS STILL FY22!!!
+# NOTE: "THIS YEARS CIRC" IS STILL FY23!!! (2023-07-10)
 compare("11265824")
 
 
@@ -88,7 +88,7 @@ compare("11265824")
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
-setnames(dat, "last_year_circ", "fy22_checkoutsp")
+setnames(dat, "last_year_circ", "fy22_checkouts")
 setnames(dat, "this_year_circ", "fy23_checkouts")
 
 setkey(old, "bibid", "itemid")
@@ -114,7 +114,6 @@ comb %>% names
 #      .(fy21_checkouts, fy21_checkoutsp)][,.N]
 
 # comb[, fy21_checkoutsp:=NULL]
-setnames(comb, "fy22_checkoutsp", "fy22_checkouts")
 
 
 rm(dat)
@@ -228,6 +227,7 @@ research[, .N]
 # 2022-07-20: 11,111,941
 # 2022-10-28: 11,149,249
 # 2023-04-03: 11,246,823
+# 2023-07-10: 11,279,190
 
 
 
