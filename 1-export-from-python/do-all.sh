@@ -14,6 +14,7 @@ ITEM_PATH=$EXACT_LOCATION/$ITEM_PATH
 
 echo "-> $BIB_PATH"
 echo "-> $ITEM_PATH"
+echo "-> $EXPDATE"
 
 # BIBS
 zcat $BIB_PATH | ./bibs/export-bib-info-first-step.py
