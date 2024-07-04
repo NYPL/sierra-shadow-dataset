@@ -16,13 +16,12 @@ options(datatable.na.strings="")
 
 args <- commandArgs(trailingOnly=TRUE)
 
-library(colorout)
+require(colorout)
 library(data.table)
 library(magrittr)
 library(stringr)
 library(libbib)
 
-source("~/.rix/tony-utils.R")
 # ------------------------------ #
 
 
