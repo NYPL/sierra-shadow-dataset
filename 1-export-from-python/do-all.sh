@@ -3,7 +3,7 @@
 set -e
 set -x
 
-GEN_LOCATION="/home/tony/data/nypl-sql-dumps/"
+GEN_LOCATION="$HOME/data/nypl-sql-dumps/"
 EXPDATE=$(ls "$GEN_LOCATION" | sort | tail -n 1)
 EXACT_LOCATION="$GEN_LOCATION$EXPDATE"
 
