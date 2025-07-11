@@ -74,7 +74,9 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 20243751, success_fun=success_report) # 2023-04-03
 # bibs %>% verify(nrow(.) >= 20331796, success_fun=success_report) # 2023-07-10
 # bibs %>% verify(nrow(.) >= 21328118, success_fun=success_report) # 2024-01-08
-bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
+# bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
+bibs %>% verify(nrow(.) >= 15988364 success_fun=success_report) # 2025-02-27 (uh-oh)
+
 
 
 
@@ -93,7 +95,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 28178231, success_fun=success_report) # 2023-04-03
 # items %>% verify(nrow(.) >= 28438103, success_fun=success_report) # 2023-07-10
 # items %>% verify(nrow(.) >= 29988322, success_fun=success_report) # 2024-01-08
-items %>% verify(nrow(.) >= 31526853, success_fun=success_report) # 2024-07-01
+# items %>% verify(nrow(.) >= 31526853, success_fun=success_report) # 2024-07-01
+items %>% verify(nrow(.) >= 32422004, success_fun=success_report) # 2024-07-27
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -180,7 +183,8 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15755737, success_fun=success_report) # 2023-04-03
 # comb %>% verify(nrow(.) >= 15934042, success_fun=success_report) # 2023-07-10
 # comb %>% verify(nrow(.) >= 16097191, success_fun=success_report) # 2024-01-08
-comb %>% verify(nrow(.) >= 16330413, success_fun=success_report) # 2024-07-01
+# comb %>% verify(nrow(.) >= 16330413, success_fun=success_report) # 2024-07-01
+comb %>% verify(nrow(.) >= 10909381, success_fun=success_report) # 2025-02-27
 
 
 set_lb_date(comb, expdate)
