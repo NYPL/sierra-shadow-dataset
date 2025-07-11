@@ -38,10 +38,10 @@ dat <- fread_plus_date("../3-heal/target/big-healed-sierra-comb-just-two-years.d
 expdate <- attr(dat, "lb.date")
 
 # ensures that years aren't messed up
-if(as.Date(expdate) > as.Date("2024-06-30"))
+if(as.Date(expdate) > as.Date("2026-06-30"))
   stop("new year. make sure you update this script")
 
-old <- fread("../data/historical-circ/historical-circ-fy17-fy22.dat.gz")
+old <- fread("../data/historical-circ/historical-circ-fy17-fy24.dat.gz")
 
 dat %>% names
 
@@ -88,8 +88,10 @@ compare("11265824")
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
-setnames(dat, "last_year_circ", "fy23_checkouts")
-setnames(dat, "this_year_circ", "fy24_checkouts")
+setnames(dat, "last_year_circ", "fy25_checkouts")
+# setnames(dat, "this_year_circ", "fy26_checkouts")
+
+dat[, this_year_circ:=NULL]  # I don't trust it
 
 setkey(old, "bibid", "itemid")
 setkey(dat, "bibid", "itemid")
@@ -135,7 +137,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 71
+comb %>% names %>% length     # 72
 
 setkey(comb, "bibid")
 
@@ -151,6 +153,7 @@ comb[, .(bib_fy17_checkouts         = sum(fy17_checkouts, na.rm=TRUE),
          bib_fy22_checkouts         = sum(fy22_checkouts, na.rm=TRUE),
          bib_fy23_checkouts         = sum(fy23_checkouts, na.rm=TRUE),
          bib_fy24_checkouts         = sum(fy24_checkouts, na.rm=TRUE),
+         bib_fy25_checkouts         = sum(fy25_checkouts, na.rm=TRUE),
          bib_total_checkouts        = sum(total_checkouts, na.rm=TRUE),
          bib_total_renewals         = sum(total_renewals, na.rm=TRUE),
          bib_total_circ             = sum(total_circ, na.rm=TRUE)),
@@ -190,12 +193,12 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "total_renewals", "total_circ", "fy17_checkouts",
                 "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
                 "fy21_checkouts", "fy22_checkouts", "fy23_checkouts",
-                "fy24_checkouts",
+                "fy24_checkouts", "fy25_checkouts",
                 "bib_fy17_checkouts", "bib_fy18_checkouts",
                 "bib_fy19_checkouts", "bib_fy20_checkouts",
                 "bib_fy21_checkouts", "bib_fy22_checkouts",
                 "bib_fy23_checkouts", "bib_fy24_checkouts",
-                "bib_total_checkouts",
+                "bib_fy25_checkouts", "bib_total_checkouts",
                 "bib_total_renewals", "bib_total_circ","dewey_class",
                 "dewey_division", "dewey_section", "lc_subject_class",
                 "lc_subject_subclass")
@@ -232,7 +235,9 @@ research[, .N]
 # 2023-04-03: 11,246,823
 # 2023-07-10: 11,279,190
 # 2024-01-08: 11,359,270
-# 2024-07-01: 11,415,317  (+ 56,047)
+# 2024-07-01: 11,415,317  (+  56,047)
+# 2025-07-10: 11,532,915  (+ 117,598)
+
 
 
 
@@ -255,6 +260,7 @@ research[, .(bib_fy17_checkouts           = sum(fy17_checkouts, na.rm=TRUE),
              bib_fy22_checkouts           = sum(fy22_checkouts, na.rm=TRUE),
              bib_fy23_checkouts           = sum(fy23_checkouts, na.rm=TRUE),
              bib_fy24_checkouts           = sum(fy24_checkouts, na.rm=TRUE),
+             bib_fy25_checkouts           = sum(fy25_checkouts, na.rm=TRUE),
              bib_total_checkouts          = sum(total_checkouts, na.rm=TRUE),
              bib_total_renewals           = sum(total_renewals, na.rm=TRUE),
              bib_total_circ               = sum(total_circ, na.rm=TRUE)),

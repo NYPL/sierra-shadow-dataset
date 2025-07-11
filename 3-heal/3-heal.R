@@ -103,12 +103,14 @@ clean_oclc <- function(astrings){
   return(astrings)
 }
 
+  system.time(
 dat[!is.na(oclc),
     oclc:=split_map_filter_reduce(oclc,
                                   mapfun=function(x){clean_oclc(x)},
                                   filterfun=remove_duplicates_and_nas,
                                   reduxfun=recombine_with_sep_closure(),
                                   cl=3)]
+)
 #    30 minutes
 # or 18 minutes
 # or 26 minutes
