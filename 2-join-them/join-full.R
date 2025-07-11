@@ -32,7 +32,7 @@ library(assertr)
 
 # 12 minutes / 6 minutes
   system.time(
-bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
+bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat", #.gz",
                         quote="", strip.white=FALSE,
                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
                         colClasses=c("suppressed"="factor", "source"="factor",
@@ -75,7 +75,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 20331796, success_fun=success_report) # 2023-07-10
 # bibs %>% verify(nrow(.) >= 21328118, success_fun=success_report) # 2024-01-08
 # bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
-bibs %>% verify(nrow(.) >= 15988364 success_fun=success_report) # 2025-02-27 (uh-oh)
+bibs %>% verify(nrow(.) >= 23186712, success_fun=success_report) # 2025-07-10
+
 
 
 
