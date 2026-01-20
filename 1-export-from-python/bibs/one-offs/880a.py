@@ -21,15 +21,7 @@ NUMBEROFLINES = 24817340
 # 2024-07-01: 24817340
 
 
-HEADER = ["bibid", "suppressed", "leader", "oh08", "source", "pub_year",
-          "catalogdate", "bib_location", "biblevel", "mattype",
-          "standard_nums", "isbn", "issn", "lccn", "oclc", "other_standard",
-          "callnum", "lccall", "callnum2", "v852a", "langcode", "lang",
-          "countrycode", "country", "publisher", "nypltype", "description1",
-          "otherdetails", "dimensions", "description2", "description3",
-          "norm_author", "norm_title", "author", "title",
-          "num_copies_from_bib", "topical_terms", "gen_subdiv_term",
-          "form_subdiv_term", "index_term", "geo_terms"]
+HEADER = ["bibid", "field880_a"]
 
 
 
@@ -244,7 +236,7 @@ def get_oclc_by_any_means_necessary(var_json):
 
 JSONERRORS = 0
 
-OUTFH = open("exported-bibs-raw-from-python.dat", "w")
+OUTFH = open("field880_a.dat", "w")
 
 OUTFH.write("{}\n".format('\t'.join(HEADER)))
 
@@ -274,18 +266,6 @@ for line in fileinput.input():
 
     bibid           = pieces[0]
     bibid           = '"{}"'.format(bibid)
-    source          = na(pieces[20])
-    pub_year        = na(pieces[13])
-    catalogdate     = na(pieces[14])
-    nypltype        = na(pieces[21])
-
-    author          = na(pieces[10])
-    title           = na(pieces[9])
-    norm_author     = na(pieces[17])
-    norm_title      = na(pieces[16])
-
-    suppressed      = na(pieces[6])
-
     fixedfields     = pieces[18]
     varfields       = pieces[19].replace("\\\\", "\\")
 
@@ -304,77 +284,15 @@ for line in fileinput.input():
         sys.stderr.write("ERROR WITH JSON!!!\n")
         sys.stderr.flush()
         good = False
-        lccn = "NA"
-        oclc = "NA"
-        lccall = "NA"
-        tmp = "NA"
-        callnum2 = "NA"
-        v852a = "NA"
-        callnum = "NA"
-        description1 = "NA"
-        description2 = "NA"
-        description3 = "NA"
-        otherdetails = "NA"
-        dimensions = "NA"
-        oh08 = "NA"
-        leader = "NA"
-        topical_terms = "NA"
-        gen_subdiv_term = "NA"
-        form_subdiv_term = "NA"
-        geo_terms = "NA"
-        publisherb = "NA"
+        field880_a = "NA"
 
 
-    langcode, lang              = cop_lang(pieces[8])
-    countrycode, country        = cop_country(pieces[15])
-    standard_nums               = cop_standard_numbers(pieces[22])
 
     if good:
-        biblevel                = get_from_fixed(fixed_json, "29", "display")
-        mattype                 = get_from_fixed(fixed_json, "30", "display")
-        location                = get_from_fixed(fixed_json, "26", "value")
-        isbn                    = get_marc_tag(var_json, "020", "a", nodigits=True)
-        issn                    = get_marc_tag(var_json, "022", "a", nodigits=True)
-        other_standard          = get_marc_tag(var_json, "024", "a", nodigits=True)
-        lccn                    = get_marc_tag(var_json, "010", "a", stripit=True)
-        oclc                    = get_marc_tag(var_json, "035", "a")
-        lccall                  = get_marc_tag(var_json, "050", "a")
-        tmp                     = get_marc_tag(var_json, "050", "b")
-        if tmp != "NA":
-            lccall = "{} {}".format(lccall, tmp)
-        callnum2                = get_marc_tag(var_json, "091", "a")
-        v852a                   = get_marc_tag(var_json, "852", "a")
-        callnum                 = get_marc_tag(var_json, "852", "h")
-        description1            = get_marc_tag(var_json, "300", "a")
-        otherdetails            = get_marc_tag(var_json, "300", "b")
-        dimensions              = get_marc_tag(var_json, "300", "c")
-        description2            = get_marc_tag(var_json, "310", "a")
-        description3            = get_marc_tag(var_json, "362", "a")
-        oh08                    = cop_008(var_json)
-        leader                  = cop_leader(var_json)
-        all_terms               = get_all_terms_650(var_json)
-        topical_terms           = all_terms[0]
-        gen_subdiv_term         = all_terms[1]
-        form_subdiv_term        = all_terms[2]
-        geo_terms               = get_geo_term(var_json)
-        index_term              = get_marc_tag(var_json, "655", "a")
-        num_copies_from_bib     = get_copies(fixed_json)
-        oclc                    = get_oclc_by_any_means_necessary(var_json)
-        publisherb              = get_marc_tag(var_json, "260", "b")
+        field880_a              = get_marc_tag(var_json, "880", "a")
 
 
-
-    everything = [bibid, suppressed, leader, oh08, source, pub_year,
-                  catalogdate, location, biblevel, mattype, standard_nums,
-                  isbn, issn, lccn, oclc, other_standard,
-                  callnum, lccall, callnum2, v852a, langcode, lang,
-                  countrycode, country, publisherb, nypltype, description1,
-                  otherdetails, dimensions, description2, description3,
-                  norm_author, norm_title, author, title, num_copies_from_bib,
-                  topical_terms, gen_subdiv_term, form_subdiv_term, index_term,
-                  geo_terms]
-
-    everything = [x.replace("\t", "") for x in everything]
+    everything = [bibid, field880_a]
 
     try:
         OUTFH.write('\t'.join(everything).replace("\n", ""))

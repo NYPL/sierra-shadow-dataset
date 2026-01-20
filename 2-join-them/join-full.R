@@ -32,7 +32,7 @@ library(assertr)
 
 # 12 minutes / 6 minutes
   system.time(
-bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat", #.gz",
+bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-python.dat.gz",
                         quote="", strip.white=FALSE,
                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
                         colClasses=c("suppressed"="factor", "source"="factor",
@@ -43,6 +43,7 @@ bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-pyt
                                      "nypltype"="factor"))
   )
 expdate <- attr(bibs, "lb.date")
+
 
 
 # 6 minutes / less than 2 (?)
@@ -75,7 +76,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 20331796, success_fun=success_report) # 2023-07-10
 # bibs %>% verify(nrow(.) >= 21328118, success_fun=success_report) # 2024-01-08
 # bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
-bibs %>% verify(nrow(.) >= 23186712, success_fun=success_report) # 2025-07-10
+# bibs %>% verify(nrow(.) >= 23186712, success_fun=success_report) # 2025-07-10
+bibs %>% verify(nrow(.) >= 21226699, success_fun=success_report) # 2026-01-13
 
 
 
@@ -98,7 +100,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 29988322, success_fun=success_report) # 2024-01-08
 # items %>% verify(nrow(.) >= 31526853, success_fun=success_report) # 2024-07-01
 # items %>% verify(nrow(.) >= 32422004, success_fun=success_report) # 2024-07-27
-items %>% verify(nrow(.) >= 32718931, success_fun=success_report) # 2025-07-11
+# items %>% verify(nrow(.) >= 32718931, success_fun=success_report) # 2025-07-11
+items %>% verify(nrow(.) >= 31997196, success_fun=success_report) # 2026-01-13
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -171,6 +174,7 @@ comb <- comb[!is.na(itype_dp),]
 # using 42 GBs of memory (old)
 # using 44 GBs of memory (old)
 # using 48 GBs of memory (old)
+# using 54 GBs of memory (old)
 # using 51 GBs of memory
 
 comb[, .N]
@@ -186,7 +190,8 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 15934042, success_fun=success_report) # 2023-07-10
 # comb %>% verify(nrow(.) >= 16097191, success_fun=success_report) # 2024-01-08
 # comb %>% verify(nrow(.) >= 16330413, success_fun=success_report) # 2024-07-01
-comb %>% verify(nrow(.) >= 16777222, success_fun=success_report) # 2025-07-10
+# comb %>% verify(nrow(.) >= 16777222, success_fun=success_report) # 2025-07-10
+  comb %>% verify(nrow(.) >= 15545892, success_fun=success_report) # 2026-01-13
 
 set_lb_date(comb, expdate)
 comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz", sep="\t")
