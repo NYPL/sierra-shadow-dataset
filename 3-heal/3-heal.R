@@ -64,6 +64,7 @@ dat[!is.na(isbn),
 # or 31 minutes
 # or 1 hour and 18 minutes
 # or 1 hour
+# or 48 minutes
 
 # --------------------------------------------------------------- #
 
@@ -76,6 +77,7 @@ dat[!is.na(issn),
                                   reduxfun=recombine_with_sep_closure(),
                                   cl=3)]
 # 2 minutes
+# 3 minutes
 
 # --------------------------------------------------------------- #
 
@@ -117,6 +119,7 @@ dat[!is.na(oclc),
 # or 18 minutes
 # or 26 minutes
 # or 1 hour and 5 minutes
+# or 48 minutes
 
 
 # --------------------------------------------------------------- #
@@ -127,12 +130,14 @@ dat[!is.na(oclc),
 # getting the date from the 008 is a dead end
 
 
-CURRENT_YEAR <- as.integer(str_sub(expdate, 0, 4))
+CURRENT_YEAR    <- as.integer(str_sub(expdate, 0, 4))
+CURRENT_DECADE  <- as.integer(str_sub(expdate, 0, 3))
 dat[!is.na(pub_year) & pub_year > CURRENT_YEAR, pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 170, pub_year:=NA]
-dat[!is.na(pub_year) & pub_year==999, pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 1000 & pub_year > 201, pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 1000, pub_year:=as.integer(10*pub_year)]
+dat[!is.na(pub_year) & pub_year < 170,          pub_year:=NA]
+dat[!is.na(pub_year) & pub_year == 999,         pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000 & pub_year > CURRENT_DECADE,
+                                                pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000,         pub_year:=as.integer(10*pub_year)]
 
 # --------------------------------------------------------------- #
 
