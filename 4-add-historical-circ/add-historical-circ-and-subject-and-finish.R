@@ -22,6 +22,8 @@ library(magrittr)
 library(stringr)
 library(libbib)     # >= v1.6.2
 
+library(duckdb)
+
 # ------------------------------ #
 
 
@@ -80,7 +82,6 @@ compare("20869063")
 
 # dat[branch_or_research=="research", .(bibid, this_year_circ)][order(-this_year_circ)]
 
-# NOTE: "THIS YEARS CIRC" IS STILL FY23!!! (2023-07-10)
 compare("11265824")
 
 
@@ -89,9 +90,7 @@ compare("11265824")
 #### UPDATE EVERY YEAR!!! ####
 #### UPDATE EVERY YEAR!!! ####
 setnames(dat, "last_year_circ", "fy25_checkouts")
-# setnames(dat, "this_year_circ", "fy26_checkouts")
-
-dat[, this_year_circ:=NULL]  # I don't trust it
+setnames(dat, "this_year_circ", "fy26_checkouts")
 
 setkey(old, "bibid", "itemid")
 setkey(dat, "bibid", "itemid")
@@ -99,6 +98,8 @@ setkey(dat, "bibid", "itemid")
 dat %>% merge(old, all.x=TRUE) -> comb
 
 comb %>% names
+
+# DAwR got one deleted
 
 # comb[!is.na(fy21_checkouts) & !is.na(fy21_checkoutsp),
 #      .(fy21_checkouts, fy21_checkoutsp)]
@@ -137,7 +138,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 72
+comb %>% names %>% length     # 73
 
 setkey(comb, "bibid")
 
@@ -154,6 +155,7 @@ comb[, .(bib_fy17_checkouts         = sum(fy17_checkouts, na.rm=TRUE),
          bib_fy23_checkouts         = sum(fy23_checkouts, na.rm=TRUE),
          bib_fy24_checkouts         = sum(fy24_checkouts, na.rm=TRUE),
          bib_fy25_checkouts         = sum(fy25_checkouts, na.rm=TRUE),
+         bib_fy26_checkouts         = sum(fy26_checkouts, na.rm=TRUE),
          bib_total_checkouts        = sum(total_checkouts, na.rm=TRUE),
          bib_total_renewals         = sum(total_renewals, na.rm=TRUE),
          bib_total_circ             = sum(total_circ, na.rm=TRUE)),
@@ -193,15 +195,15 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "total_renewals", "total_circ", "fy17_checkouts",
                 "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
                 "fy21_checkouts", "fy22_checkouts", "fy23_checkouts",
-                "fy24_checkouts", "fy25_checkouts",
+                "fy24_checkouts", "fy25_checkouts", "fy26_checkouts",
                 "bib_fy17_checkouts", "bib_fy18_checkouts",
                 "bib_fy19_checkouts", "bib_fy20_checkouts",
                 "bib_fy21_checkouts", "bib_fy22_checkouts",
                 "bib_fy23_checkouts", "bib_fy24_checkouts",
-                "bib_fy25_checkouts", "bib_total_checkouts",
-                "bib_total_renewals", "bib_total_circ","dewey_class",
-                "dewey_division", "dewey_section", "lc_subject_class",
-                "lc_subject_subclass")
+                "bib_fy25_checkouts", "bib_fy26_checkouts",
+                "bib_total_checkouts", "bib_total_renewals",
+                "bib_total_circ","dewey_class", "dewey_division",
+                "dewey_section", "lc_subject_class", "lc_subject_subclass")
 setcolorder(big, finalorder)
 
 # --------------------------------------------------------------- #
@@ -213,8 +215,21 @@ big[branch_or_research=="branch"] -> branch
 set_lb_date(branch, expdate)
 branch %>% fwrite_plus_date("../target/sierra-branch-healed-joined.dat.gz")
 
+bcon <- dbConnect(duckdb(), dbdir=sprintf("../target/sierra-branch-healed-joined-%s.duckdb", expdate),
+                  read_only=FALSE)
+dbWriteTable(bcon, "sierra_branch", branch)
+dbDisconnect(bcon, shutdown=TRUE)
+
+
+
 set_lb_date(big, expdate)
 big %>% fwrite_plus_date("../target/sierra-all-healed-joined.dat.gz")
+
+acon <- dbConnect(duckdb(), dbdir=sprintf("../target/sierra-all-healed-joined-%s.duckdb", expdate),
+                  read_only=FALSE)
+dbWriteTable(acon, "sierra_all", big)
+dbDisconnect(acon, shutdown=TRUE)
+
 
 
 
@@ -237,6 +252,7 @@ research[, .N]
 # 2024-01-08: 11,359,270
 # 2024-07-01: 11,415,317  (+  56,047)
 # 2025-07-10: 11,532,915  (+ 117,598)
+# 2026-01-13: 11,585,381  (+  52,466)
 
 
 
@@ -261,6 +277,7 @@ research[, .(bib_fy17_checkouts           = sum(fy17_checkouts, na.rm=TRUE),
              bib_fy23_checkouts           = sum(fy23_checkouts, na.rm=TRUE),
              bib_fy24_checkouts           = sum(fy24_checkouts, na.rm=TRUE),
              bib_fy25_checkouts           = sum(fy25_checkouts, na.rm=TRUE),
+             bib_fy26_checkouts           = sum(fy26_checkouts, na.rm=TRUE),
              bib_total_checkouts          = sum(total_checkouts, na.rm=TRUE),
              bib_total_renewals           = sum(total_renewals, na.rm=TRUE),
              bib_total_circ               = sum(total_circ, na.rm=TRUE)),
@@ -282,4 +299,8 @@ research[bibid=="12453190", ]
 set_lb_date(research, expdate)
 research %>% fwrite_plus_date("../target/sierra-research-healed-joined.dat.gz")
 
+rcon <- dbConnect(duckdb(), dbdir=sprintf("../target/sierra-research-healed-joined-%s.duckdb", expdate),
+                  read_only=FALSE)
+dbWriteTable(rcon, "sierra_research", research)
+dbDisconnect(rcon, shutdown=TRUE)
 
