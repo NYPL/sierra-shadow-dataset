@@ -1,0 +1,22 @@
+
+comb <- comb[!(str_detect(item_location_str_dp,
+                          "OFFSITE . Request In Advance . (pul|cul|hl)") |
+               str_detect(item_location_str_dp,
+                          "OFFSITE . ReCAP Partner"))]
+
+
+3876 dupes (after regex filter)
+
+do the _ALL_ not have created dates?
+
+yes, it looks like it's safe to remove NA created_dates
+
+and the historical circ is poisoned
+
+16334647
+
+16336585 - 16328475
+
+unpoisoned hist circ (-fy24]
+
+now do analysis of missing items
