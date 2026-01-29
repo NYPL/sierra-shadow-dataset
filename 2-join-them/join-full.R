@@ -101,7 +101,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 31526853, success_fun=success_report) # 2024-07-01
 # items %>% verify(nrow(.) >= 32422004, success_fun=success_report) # 2024-07-27
 # items %>% verify(nrow(.) >= 32718931, success_fun=success_report) # 2025-07-11
-items %>% verify(nrow(.) >= 31997196, success_fun=success_report) # 2026-01-13
+# items %>% verify(nrow(.) >= 31997196, success_fun=success_report) # 2026-01-13
+items %>% verify(nrow(.) >= 15552119, success_fun=success_report) # 2026-01-13 # !!! big criteria change
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -141,10 +142,12 @@ gc()
 # comb <- comb[!str_detect(item_location_str_dp, "[pc]ul")]
 
 # 2022-10-28: this is the first time harvard is in the mix
+comb[,.N]
 comb <- comb[!(str_detect(item_location_str_dp,
                           "OFFSITE . Request In Advance . (pul|cul|hl)") |
                str_detect(item_location_str_dp,
                           "OFFSITE . ReCAP Partner"))]
+comb[,.N]
 
 
 setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable"))
@@ -191,7 +194,8 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 16097191, success_fun=success_report) # 2024-01-08
 # comb %>% verify(nrow(.) >= 16330413, success_fun=success_report) # 2024-07-01
 # comb %>% verify(nrow(.) >= 16777222, success_fun=success_report) # 2025-07-10
-  comb %>% verify(nrow(.) >= 15545892, success_fun=success_report) # 2026-01-13
+# comb %>% verify(nrow(.) >= 15545892, success_fun=success_report) # 2026-01-13
+  comb %>% verify(nrow(.) >= 15543947, success_fun=success_report) # 2026-01-13
 
 set_lb_date(comb, expdate)
 comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz", sep="\t")

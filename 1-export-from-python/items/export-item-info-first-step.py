@@ -190,6 +190,7 @@ for currentline in fileinput.input():
         SKIPPED_BECAUSE_DELETED_ITEM += 1
         continue
 
+
     location                    = get_loc_code(raw_fields[6])
     iid                         = raw_fields[0]
     iid                         = '"{}"'.format(iid)
@@ -207,11 +208,14 @@ for currentline in fileinput.input():
         debug(COUNTER, currentline, "fixed fields are empty")
         SKIPPED_BECAUSE_FIXED_FIELD_HAS_NO_LENGTH += 1
         continue
+    created_date                = get_created_date(fixed)
+    if created_date=="NA":
+        debug(COUNTER, currentline, "no created date")
+        continue
     itype                       = get_itype(fixed)
     total_circ                  = get_total_circ(fixed)
     last_year_circ              = get_last_years_circ(fixed)
     this_year_circ              = get_year_to_date_circ(fixed)
-    created_date                = get_created_date(fixed)
     status                      = get_status(fixed)
     total_checkouts             = "{}".format(get_total_checkouts(fixed))
     total_renewals              = "{}".format(get_total_renewals(fixed))
