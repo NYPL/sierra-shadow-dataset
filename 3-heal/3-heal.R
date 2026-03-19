@@ -38,8 +38,8 @@ dat <- fread_plus_date("../2-join-them/target/big-sierra-comb.dat.gz",
                                     "nypltype"="factor",
                                     "hasmultbibids"="logical",
                                     "status"="factor",
-                                    "item_location_code_dp"="factor",
-                                    "item_location_str_dp"="factor"))
+                                    "item_location_code"="factor",
+                                    "item_location_str"="factor"))
 expdate <- attr(dat, "lb.date")
 
 dat[bibid==20869063] # :)
@@ -122,6 +122,13 @@ dat[!is.na(oclc),
 # or 1 hour and 5 minutes
 # or 48 minutes
 
+# --------------------------------------------------------------- #
+### interlude
+
+dat %>% names %>% str_subset("\\.[xy]$")
+setnames(dat, "callnum.x", "callnum")
+setnames(dat, "callnum.y", "item_callnum")
+
 
 # --------------------------------------------------------------- #
 
@@ -133,21 +140,12 @@ dat[!is.na(oclc),
 
 CURRENT_YEAR    <- as.integer(str_sub(expdate, 0, 4))
 CURRENT_DECADE  <- as.integer(str_sub(expdate, 0, 3))
-dat[!is.na(pub_year) & pub_year > CURRENT_YEAR, pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 170,          pub_year:=NA]
-dat[!is.na(pub_year) & pub_year == 999,         pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 1000 & pub_year > CURRENT_DECADE,
-                                                pub_year:=NA]
-dat[!is.na(pub_year) & pub_year < 1000,         pub_year:=as.integer(10*pub_year)]
-
-# --------------------------------------------------------------- #
-
-# interlude to remove "_dp" from names
-setnames(dat, "callnum_dp", "item_callnum")
-
-dat %>% names %>% str_replace("_dp$", "") -> withoutdp
-setnames(dat, withoutdp)
-
+dat[!is.na(pub_year) & pub_year > CURRENT_YEAR,   pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 170,            pub_year:=NA]
+dat[!is.na(pub_year) & pub_year == 999,           pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000
+                     & pub_year > CURRENT_DECADE, pub_year:=NA]
+dat[!is.na(pub_year) & pub_year < 1000,           pub_year:=as.integer(10*pub_year)]
 
 # --------------------------------------------------------------- #
 
