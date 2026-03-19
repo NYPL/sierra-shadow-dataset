@@ -211,6 +211,15 @@ setcolorder(big, finalorder)
 
 
 big[branch_or_research=="branch"] -> branch
+
+### TEMP
+v880a <- read.csv("../1-export-from-python/bibs/one-offs/field880_a.dat", sep="\t")
+setDT(v880a)
+branch[, bibid:=as.character(bibid)]
+setnames(v880a, "field880_a", "v880a")
+branch %<>% merge(v880a, all.x=TRUE)
+### END TEMP
+
 set_lb_date(branch, expdate)
 branch %>% fwrite_plus_date("../target/sierra-branch-healed-joined.dat.gz")
 
@@ -252,6 +261,7 @@ research[, .N]
 # 2024-07-01: 11,415,317  (+  56,047)
 # 2025-07-10: 11,532,915  (+ 117,598)
 # 2026-01-13: 11,585,381  (+  52,466) [ish]
+# 2026-03-17: 12,460,726  (+ 875,345)
 
 
 
