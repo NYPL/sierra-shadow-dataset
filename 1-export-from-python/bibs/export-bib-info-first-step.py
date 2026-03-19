@@ -94,7 +94,7 @@ def get_marc_tag(thefield, marcfield, subtag,
     if stripit:
         whatineed = [item.strip() for item in whatineed]
     if nodigits:
-        whatineed = [re.sub("\D", "", item) for item in whatineed]
+        whatineed = [re.sub(r"\D", "", item) for item in whatineed]
     if whatineed=="":
         return "NA"
     if len(whatineed)==0:
@@ -218,7 +218,7 @@ def get_oclc_by_any_means_necessary(var_json):
         from035 = get_marc_tag(var_json, "035", "a")
 
         these = [item.lower() for item in from035.split(";")]
-        these = [re.sub("\(ocolc\)\D*", "", item) for item in these if re.match("\(ocolc\)", item)]
+        these = [re.sub(r"\(ocolc\)\D*", "", item) for item in these if re.match(r"\(ocolc\)", item)]
         # print(these)
         # print("from 035: {}".format(from035))
         allofthem = []

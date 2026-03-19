@@ -70,13 +70,13 @@ def get_bibid(alist, itemid):
     if len(alist) > 1:
         efh.write("MORE THAN ONE BIB FOR ITEM: {}\n".format(itemid))
         hasmultbibids = "TRUE"
-    return ('"{}"'.format(alist[0]), hasmultbibids)
+    return (alist, hasmultbibids)
 
 @cop_out
 def get_callnum(acall):
     if acall == '\\N':
         return "NA"
-    if re.match("\|h", acall):
+    if re.match(r"\|h", acall):
         acall = acall[2:]
     return acall
 
@@ -153,14 +153,14 @@ def WRITE_IT(ofh, astr):
 
 
 
-HEADER = '\t'.join(["itemid", "bibid_dp", "hasmultbibids",
-                    "item_location_code_dp", "item_location_str_dp",
-                    "barcode_dp",
-                    "callnum_dp",
-                    "total_checkouts_dp", "total_renewals_dp",
-                    "total_circ_dp", "last_year_circ_dp",
-                    "this_year_circ_dp", "itype_dp",
-                    "created_date_dp", "status"])
+HEADER = '\t'.join(["itemid", "bibid", "hasmultbibids",
+                    "item_location_code", "item_location_str",
+                    "barcode",
+                    "callnum",
+                    "total_checkouts", "total_renewals",
+                    "total_circ", "last_year_circ",
+                    "this_year_circ", "itype",
+                    "created_date", "status"])
 
 
 
@@ -193,7 +193,6 @@ for currentline in fileinput.input():
 
     location                    = get_loc_code(raw_fields[6])
     iid                         = raw_fields[0]
-    iid                         = '"{}"'.format(iid)
     bibids, hasmultbibids       = get_bibid(raw_fields[5], iid)
     barcode                     = get_barcode(raw_fields[8])
     callnum                     = get_callnum(raw_fields[9])
@@ -222,13 +221,14 @@ for currentline in fileinput.input():
     locationcode, locationstr   = cop_location(raw_fields[6])
 
 
-    outstr = '\t'.join([iid, bibids, hasmultbibids, locationcode,
-                        locationstr, barcode, callnum, total_checkouts,
-                        total_renewals, total_circ, last_year_circ,
-                        this_year_circ, itype, created_date, status])
+    for bibid in bibids:
+        outstr = '\t'.join([iid, bibid, hasmultbibids, locationcode,
+                            locationstr, barcode, callnum, total_checkouts,
+                            total_renewals, total_circ, last_year_circ,
+                            this_year_circ, itype, created_date, status])
 
-    WRITE_IT(ofh, outstr)
-    LINES_EXPORTED += 1
+        WRITE_IT(ofh, outstr)
+        LINES_EXPORTED += 1
 
 
 ofh.close()
