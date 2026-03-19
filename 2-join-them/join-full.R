@@ -54,8 +54,8 @@ items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-
                          colClasses=c("itemid"="character",
                                       "hasmultbibids"="logical",
                                       "status"="factor",
-                                      "item_location_code_dp"="factor",
-                                      "item_location_str_dp"="factor"))
+                                      "item_location_code"="factor",
+                                      "item_location_str"="factor"))
   )
 
 # using 32 GB of RAM now
@@ -77,7 +77,8 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 21328118, success_fun=success_report) # 2024-01-08
 # bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
 # bibs %>% verify(nrow(.) >= 23186712, success_fun=success_report) # 2025-07-10
-bibs %>% verify(nrow(.) >= 21226699, success_fun=success_report) # 2026-01-13
+# bibs %>% verify(nrow(.) >= 21226699, success_fun=success_report) # 2026-01-13
+bibs %>% verify(nrow(.) >= 21312901, success_fun=success_report) # 2026-03-17
 
 
 
@@ -102,7 +103,8 @@ items[, .N]
 # items %>% verify(nrow(.) >= 32422004, success_fun=success_report) # 2024-07-27
 # items %>% verify(nrow(.) >= 32718931, success_fun=success_report) # 2025-07-11
 # items %>% verify(nrow(.) >= 31997196, success_fun=success_report) # 2026-01-13
-items %>% verify(nrow(.) >= 15552119, success_fun=success_report) # 2026-01-13 # !!! big criteria change
+# items %>% verify(nrow(.) >= 15552119, success_fun=success_report) # 2026-01-13 # !!! big criteria change
+items %>% verify(nrow(.) >= 16405270, success_fun=success_report) # 2026-03-17
 
 
 bibs[, bibid:=str_replace_all(bibid, '"', "")]
@@ -113,9 +115,7 @@ bibs <- bibs[source=="sierra-nypl"]
 gc()
 
 
-setnames(items, "bibid_dp", "bibid")
 setkey(items, "bibid")
-
 setkey(bibs, "bibid")
 bibs[, inbibtable:=TRUE]
 
@@ -143,9 +143,9 @@ gc()
 
 # 2022-10-28: this is the first time harvard is in the mix
 comb[,.N]
-comb <- comb[!(str_detect(item_location_str_dp,
+comb <- comb[!(str_detect(item_location_str,
                           "OFFSITE . Request In Advance . (pul|cul|hl)") |
-               str_detect(item_location_str_dp,
+               str_detect(item_location_str,
                           "OFFSITE . ReCAP Partner"))]
 comb[,.N]
 
@@ -170,7 +170,7 @@ comb[bibid=="19375763"]
 comb <- comb[inbibtable==TRUE]
 # wait, ¿then why did I do a full join?
 
-comb <- comb[!is.na(itype_dp),]
+comb <- comb[!is.na(itype),]
 
 # using 49 GBs of memory (old)
 # using 35 GBs of memory (old)
@@ -195,7 +195,9 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 16330413, success_fun=success_report) # 2024-07-01
 # comb %>% verify(nrow(.) >= 16777222, success_fun=success_report) # 2025-07-10
 # comb %>% verify(nrow(.) >= 15545892, success_fun=success_report) # 2026-01-13
-  comb %>% verify(nrow(.) >= 15543947, success_fun=success_report) # 2026-01-13
+# comb %>% verify(nrow(.) >= 15543947, success_fun=success_report) # 2026-01-13
+  comb %>% verify(nrow(.) >= 16396533, success_fun=success_report) # 2026-03-17
+
 
 set_lb_date(comb, expdate)
 comb %>% fwrite_plus_date("./target/big-sierra-comb.dat.gz", sep="\t")
