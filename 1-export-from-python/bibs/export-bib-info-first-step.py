@@ -29,7 +29,8 @@ HEADER = ["bibid", "suppressed", "leader", "oh08", "source", "pub_year",
           "otherdetails", "dimensions", "description2", "description3",
           "norm_author", "norm_title", "author", "title",
           "num_copies_from_bib", "topical_terms", "gen_subdiv_term",
-          "form_subdiv_term", "index_term", "geo_terms"]
+          "form_subdiv_term", "index_term", "geo_terms", "v880a",
+          "aeonbiblinkp"]
 
 
 
@@ -323,6 +324,7 @@ for line in fileinput.input():
         form_subdiv_term = "NA"
         geo_terms = "NA"
         publisherb = "NA"
+        v880a = "NA"
 
 
     langcode, lang              = cop_lang(pieces[8])
@@ -361,7 +363,13 @@ for line in fileinput.input():
         num_copies_from_bib     = get_copies(fixed_json)
         oclc                    = get_oclc_by_any_means_necessary(var_json)
         publisherb              = get_marc_tag(var_json, "260", "b")
+        v880a                   = get_marc_tag(var_json, "880", "a")
+        aeonbiblinkp            = get_marc_tag(var_json, "856", "u")
 
+        if re.search("aeon/Aeon", aeonbiblinkp):
+            aeonbiblinkp = "TRUE"
+        else:
+            aeonbiblinkp = "FALSE"
 
 
     everything = [bibid, suppressed, leader, oh08, source, pub_year,
@@ -372,7 +380,7 @@ for line in fileinput.input():
                   otherdetails, dimensions, description2, description3,
                   norm_author, norm_title, author, title, num_copies_from_bib,
                   topical_terms, gen_subdiv_term, form_subdiv_term, index_term,
-                  geo_terms]
+                  geo_terms, v880a, aeonbiblinkp]
 
     everything = [x.replace("\t", "") for x in everything]
 

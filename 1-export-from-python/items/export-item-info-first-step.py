@@ -160,7 +160,7 @@ HEADER = '\t'.join(["itemid", "bibid", "hasmultbibids",
                     "total_checkouts", "total_renewals",
                     "total_circ", "last_year_circ",
                     "this_year_circ", "itype",
-                    "created_date", "status"])
+                    "created_date", "status", "aeonitemnote"])
 
 
 
@@ -197,6 +197,7 @@ for currentline in fileinput.input():
     barcode                     = get_barcode(raw_fields[8])
     callnum                     = get_callnum(raw_fields[9])
 
+
     try:
         fixed                   = json.loads(raw_fields[11])
     except:
@@ -220,12 +221,17 @@ for currentline in fileinput.input():
     total_renewals              = "{}".format(get_total_renewals(fixed))
     locationcode, locationstr   = cop_location(raw_fields[6])
 
+    aeonitemnote                = "FALSE"
+
+    if re.search("AEON eligible", raw_fields[12]):
+        aeonitemnote = "TRUE"
 
     for bibid in bibids:
         outstr = '\t'.join([iid, bibid, hasmultbibids, locationcode,
                             locationstr, barcode, callnum, total_checkouts,
                             total_renewals, total_circ, last_year_circ,
-                            this_year_circ, itype, created_date, status])
+                            this_year_circ, itype, created_date, status,
+                            aeonitemnote])
 
         WRITE_IT(ofh, outstr)
         LINES_EXPORTED += 1
