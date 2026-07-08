@@ -45,22 +45,6 @@ bibs <- fread_plus_date("../1-export-from-python/bibs/exported-bibs-raw-from-pyt
 expdate <- attr(bibs, "lb.date")
 
 
-
-# 6 minutes / less than 2 (?)
-  system.time(
-items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
-                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
-                         strip.white=FALSE,
-                         colClasses=c("itemid"="character",
-                                      "hasmultbibids"="logical",
-                                      "status"="factor",
-                                      "item_location_code"="factor",
-                                      "item_location_str"="factor"))
-  )
-
-# using 32 GB of RAM now
-
-
 bibs[, .N]
 # bibs %>% verify(nrow(.) >= 15364558, success_fun=success_report) # 2019-10
 # bibs %>% verify(nrow(.) >= 15525387, success_fun=success_report) # 2019-12
@@ -78,11 +62,30 @@ bibs[, .N]
 # bibs %>% verify(nrow(.) >= 22529303, success_fun=success_report) # 2024-07-01
 # bibs %>% verify(nrow(.) >= 23186712, success_fun=success_report) # 2025-07-10
 # bibs %>% verify(nrow(.) >= 21226699, success_fun=success_report) # 2026-01-13
-bibs %>% verify(nrow(.) >= 21312901, success_fun=success_report) # 2026-03-17
+# bibs %>% verify(nrow(.) >= 21312901, success_fun=success_report) # 2026-03-17
+bibs %>% verify(nrow(.) >= 21502604, success_fun=success_report) # 2026-07-07
+
+
+bibs[, bibid:=str_replace_all(bibid, '"', "")]
+bibs <- bibs[source=="sierra-nypl"]
+gc()
 
 
 
 
+# 6 minutes / less than 2 (?)
+  system.time(
+items <- fread_plus_date("../1-export-from-python/items/exported-items-raw-from-python.dat.gz",
+                         na.strings=c("NA", "", "NANA"), header=TRUE, sep="\t",
+                         strip.white=FALSE,
+                         colClasses=c("itemid"="character",
+                                      "hasmultbibids"="logical",
+                                      "status"="factor",
+                                      "item_location_code"="factor",
+                                      "item_location_str"="factor"))
+  )
+
+# using 32 GB of RAM now
 
 
 items[, .N]
@@ -104,15 +107,10 @@ items[, .N]
 # items %>% verify(nrow(.) >= 32718931, success_fun=success_report) # 2025-07-11
 # items %>% verify(nrow(.) >= 31997196, success_fun=success_report) # 2026-01-13
 # items %>% verify(nrow(.) >= 15552119, success_fun=success_report) # 2026-01-13 # !!! big criteria change
-items %>% verify(nrow(.) >= 16405270, success_fun=success_report) # 2026-03-17
+# items %>% verify(nrow(.) >= 16405270, success_fun=success_report) # 2026-03-17
+items %>% verify(nrow(.) >= 16390001, success_fun=success_report) # 2026-07-07 !!!
 
 
-bibs[, bibid:=str_replace_all(bibid, '"', "")]
-
-
-# bibs %>% dt_counts_and_percents("source")
-bibs <- bibs[source=="sierra-nypl"]
-gc()
 
 
 setkey(items, "bibid")
@@ -127,7 +125,7 @@ items <- items[str_detect(bibid, "^\\d+$"), ]
 items[, initemtable:=TRUE]
 
 
-# about 3.5 minutes
+# about 3.5 minutes / 1 minute
   system.time(
 bibs %>% merge.data.table(items, all=TRUE) -> comb
   )
@@ -166,6 +164,10 @@ comb[itemid=="14021710"]
 # late March 2023
 comb[bibid=="19375763"]
 
+# Kierkegaard and the Limits of the Ethical
+# Took out FY26 (new end)
+comb[bibid=="11788688"]
+
 
 comb <- comb[inbibtable==TRUE]
 # wait, ¿then why did I do a full join?
@@ -178,7 +180,8 @@ comb <- comb[!is.na(itype),]
 # using 44 GBs of memory (old)
 # using 48 GBs of memory (old)
 # using 54 GBs of memory (old)
-# using 51 GBs of memory
+# using 51 GBs of memory (old)
+# using 42 GBs of memory (???)
 
 comb[, .N]
 # comb %>% verify(nrow(.) >= 16243897, success_fun=success_report) # 2020-07
@@ -196,7 +199,29 @@ comb[, .N]
 # comb %>% verify(nrow(.) >= 16777222, success_fun=success_report) # 2025-07-10
 # comb %>% verify(nrow(.) >= 15545892, success_fun=success_report) # 2026-01-13
 # comb %>% verify(nrow(.) >= 15543947, success_fun=success_report) # 2026-01-13
-  comb %>% verify(nrow(.) >= 16396533, success_fun=success_report) # 2026-03-17
+# comb %>% verify(nrow(.) >= 16396533, success_fun=success_report) # 2026-03-17
+  comb %>% verify(nrow(.) >= 16379233, success_fun=success_report) # 2026-07-07 # !!!
+
+
+
+# new tasks
+
+comb[, aeon_indicator:=FALSE]
+comb[aeonbiblinkp==TRUE | aeonitemnote==TRUE, aeon_indicator:=TRUE]
+comb[, aeonbiblinkp:=NULL]
+comb[, aeonitemnote:=NULL]
+
+setnames(comb, "callnum.x", "callnum")
+setnames(comb, "callnum.y", "item_callnum")
+
+comb %>% names
+
+
+xwalk <- fread("../data/xwalks/location-code-collection-xwalk.csv")
+setnames(xwalk, c("item_location_code", "research_collection"))
+
+comb %<>% merge(xwalk, all.x=TRUE, by="item_location_code")
+
 
 
 set_lb_date(comb, expdate)

@@ -6,7 +6,7 @@ import re
 import fileinput
 
 
-NUMBEROFLINES = 24817340
+NUMBEROFLINES = 24027699
 
 # 2019-12-??: 17582690
 # 2020-07-23: 17839327	    (+   256,637)
