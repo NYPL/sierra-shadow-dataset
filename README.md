@@ -450,6 +450,14 @@ The (final) output files are:
 
   - `created_date`
 
+  - `status`
+
+  - `v880a`
+
+  - `research_collection`
+
+  - `aeon_indicator`
+
   - `total_checkouts`
 
   - `total_renewals`
@@ -473,6 +481,10 @@ The (final) output files are:
   - `fy23_checkouts`
 
   - `fy24_checkouts`
+
+  - `fy25_checkouts`
+
+  - `fy26_checkouts`
 
   - `bib_fy17_checkouts`
 
@@ -505,6 +517,14 @@ The (final) output files are:
   - `bib_fy24_checkouts`
 
     Sum of FY24 checkouts for all items under bibid (very useful)
+
+  - `bib_fy25_checkouts`
+
+    Sum of FY25 checkouts for all items under bibid (very useful)
+
+  - `bib_fy26_checkouts`
+
+    Sum of FY26 checkouts for all items under bibid (very useful)
 
   - `bib_total_checkouts`
 

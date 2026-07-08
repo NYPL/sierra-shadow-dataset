@@ -45,7 +45,6 @@ expdate <- attr(dat, "lb.date")
 dat[bibid==20869063] # :)
 
 
-
 # --------------------------------------------------------------- #
 
 ##########
@@ -121,14 +120,6 @@ dat[!is.na(oclc),
 # or 26 minutes
 # or 1 hour and 5 minutes
 # or 48 minutes
-
-# --------------------------------------------------------------- #
-### interlude
-
-dat %>% names %>% str_subset("\\.[xy]$")
-setnames(dat, "callnum.x", "callnum")
-setnames(dat, "callnum.y", "item_callnum")
-
 
 # --------------------------------------------------------------- #
 

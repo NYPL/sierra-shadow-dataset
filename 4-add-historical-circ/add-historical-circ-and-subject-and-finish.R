@@ -48,6 +48,7 @@ old <- fread("../data/historical-circ/historical-circ-fy17-fy24.dat.gz")
 dat %>% names
 
 
+
 compare <- function(lookupbibid){
   print(old[bibid==lookupbibid])
   print(dat[bibid==lookupbibid, .(title, total_checkouts, total_renewals,
@@ -78,6 +79,9 @@ compare("13967181")
 
 # :)
 compare("20869063")
+
+# Kierkegaard and the Limits of the Ethical
+compare("11788688")
 
 
 # dat[branch_or_research=="research", .(bibid, this_year_circ)][order(-this_year_circ)]
@@ -129,6 +133,7 @@ comb[bibid=="11366725"] # SICP
 comb[bibid=="11061659"] # probable and provable
 comb[bibid=="12453190"] # de sueños azules y contrasueños
 comb[bibid=="20869063"] # :)
+comb[bibid=="11788688"] # Kierkegaard and the Limits of the Ethical
 
 
 setcolorder(comb, c("bibid", "itemid", "inbibtable", "initemtable",
@@ -138,7 +143,7 @@ comb %>% names
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
 #### CHANGE EVERY YEAR ####
-comb %>% names %>% length     # 73
+comb %>% names %>% length     # 76
 
 setkey(comb, "bibid")
 
@@ -190,11 +195,13 @@ finalorder <- c("bibid", "itemid", "inbibtable", "initemtable", "suppressed",
                 "topical_terms", "gen_subdiv_term", "form_subdiv_term",
                 "index_term", "geo_terms", "hasmultbibids",
                 "item_location_code", "item_location_str", "barcode",
-                "item_callnum", "created_date", "status", "total_checkouts",
-                "total_renewals", "total_circ", "fy17_checkouts",
-                "fy18_checkouts", "fy19_checkouts", "fy20_checkouts",
-                "fy21_checkouts", "fy22_checkouts", "fy23_checkouts",
-                "fy24_checkouts", "fy25_checkouts", "fy26_checkouts",
+                "item_callnum", "created_date", "status",
+                "v880a", "research_collection", "aeon_indicator",
+                "total_checkouts", "total_renewals", "total_circ",
+                "fy17_checkouts", "fy18_checkouts", "fy19_checkouts",
+                "fy20_checkouts", "fy21_checkouts", "fy22_checkouts",
+                "fy23_checkouts", "fy24_checkouts", "fy25_checkouts",
+                "fy26_checkouts",
                 "bib_fy17_checkouts", "bib_fy18_checkouts",
                 "bib_fy19_checkouts", "bib_fy20_checkouts",
                 "bib_fy21_checkouts", "bib_fy22_checkouts",
@@ -209,16 +216,8 @@ setcolorder(big, finalorder)
 
 
 
-
 big[branch_or_research=="branch"] -> branch
 
-### TEMP
-v880a <- read.csv("../1-export-from-python/bibs/one-offs/field880_a.dat", sep="\t")
-setDT(v880a)
-branch[, bibid:=as.character(bibid)]
-setnames(v880a, "field880_a", "v880a")
-branch %<>% merge(v880a, all.x=TRUE)
-### END TEMP
 
 set_lb_date(branch, expdate)
 branch %>% fwrite_plus_date("../target/sierra-branch-healed-joined.dat.gz")
@@ -262,6 +261,7 @@ research[, .N]
 # 2025-07-10: 11,532,915  (+ 117,598)
 # 2026-01-13: 11,585,381  (+  52,466) [ish]
 # 2026-03-17: 12,460,726  (+ 875,345)
+# 2026-07-07: 12,501,493  (+  40,767)
 
 
 
